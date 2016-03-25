@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="662.0001136230494" prefWidth="1045.0000999999975" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.MainFrameController">
+  <!-- TODO Add Nodes -->
+  <children>
+    <BorderPane layoutX="0.0" layoutY="0.0" prefHeight="662.0001220703125" prefWidth="1046.0" style="-fx-background-color: white;">
+      <top>
+        <MenuBar>
+          <menus>
+            <Menu mnemonicParsing="true" text="File">
+              <items>
+                <MenuItem mnemonicParsing="true" onAction="#clientiPressed" text="Clienti" />
+                <MenuItem mnemonicParsing="true" onAction="#furnizoriPressed" text="Furnizori" />
+                <MenuItem mnemonicParsing="true" onAction="#exitPressed" text="Exit" />
+              </items>
+            </Menu>
+          </menus>
+        </MenuBar>
+      </top>
+    </BorderPane>
+  </children>
+</AnchorPane>
