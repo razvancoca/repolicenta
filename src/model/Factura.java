@@ -34,7 +34,7 @@ public class Factura extends BaseModel {
 	private Chitanta chitanta;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	List<Articol> articole;
+	List<InregistrareFactura> articole;
 
 
 	public int getId() {
@@ -113,16 +113,16 @@ public class Factura extends BaseModel {
 		this.chitanta = chitanta;
 	}
 
-	public List<Articol> getArticole() {
+	public List<InregistrareFactura> getArticole() {
 		return articole;
 	}
 
-	public void setArticole(List<Articol> articole) {
+	public void setArticole(List<InregistrareFactura> articole) {
 		this.articole = articole;
 	}
 
 	public Factura(int id, String nrdoc, Timestamp dataDocument, Timestamp dataScadenta, int tip, String idInCategorie,
-			Firma firma, Chitanta chitanta, List<Articol> articole) {
+			Firma firma, Chitanta chitanta, List<InregistrareFactura> articole) {
 		super();
 		this.id = id;
 		this.nrdoc = nrdoc;
@@ -168,7 +168,7 @@ public class Factura extends BaseModel {
 		double total=0;
 		DecimalFormat df = new DecimalFormat("0.00");
 		if(articole!=null){
-			for(Articol a:articole){
+			for(InregistrareFactura a:articole){
 				total+=a.getTotal();
 			}
 		}

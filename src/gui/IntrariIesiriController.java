@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import controller.ArticolController;
 import controller.ContController;
 import controller.FacturaController;
 import controller.FirmaController;
@@ -46,12 +47,12 @@ import model.Articol;
 import model.Cont;
 import model.Factura;
 import model.Firma;
-import np.com.ngopal.control.AutoFillTextBox;
+import model.InregistrareFactura;
 
 public class IntrariIesiriController implements Initializable {
 	private int TIP;
 	ObservableList<Factura> observableListFacturi;
-	ObservableList<Articol> observableListArticole;
+	ObservableList<InregistrareFactura> observableListArticole;
 	ObservableList<Firma> observableListFirme;
 	ObservableList<Cont> observableListConturi;
 
@@ -76,32 +77,32 @@ public class IntrariIesiriController implements Initializable {
 	@FXML
 	private TableColumn<Factura, String> nrCrt1;
 	@FXML
-	private TableColumn<Articol, String> totalTable1;
+	private TableColumn<InregistrareFactura, String> totalTable1;
 	@FXML
 	private Label tipLabel;
 
 	// TableView2
 
 	@FXML
-	private TableView<Articol> table2;
+	private TableView<InregistrareFactura> table2;
 	@FXML
-	private TableColumn<Articol, String> denumire2;
+	private TableColumn<InregistrareFactura, Articol> denumire2;
 	@FXML
-	private TableColumn<Articol, Firma> um;
+	private TableColumn<InregistrareFactura, Firma> um;
 	@FXML
-	private TableColumn<Articol, Double> cantitate;
+	private TableColumn<InregistrareFactura, Double> cantitate;
 	@FXML
-	private TableColumn<Articol, Double> pretUnitate;
+	private TableColumn<InregistrareFactura, Double> pretUnitate;
 	@FXML
-	private TableColumn<Articol, Double> valoare;
+	private TableColumn<InregistrareFactura, Double> valoare;
 	@FXML
-	private TableColumn<Articol, Double> TVA;
+	private TableColumn<InregistrareFactura, Double> TVA;
 	@FXML
-	private TableColumn<Articol, Double> total;
+	private TableColumn<InregistrareFactura, Double> total;
 	@FXML
-	private TableColumn<Articol, Double> valoareTVA;
+	private TableColumn<InregistrareFactura, Double> valoareTVA;
 	@FXML
-	private TableColumn<Articol, Cont> cont;
+	private TableColumn<InregistrareFactura, Cont> cont;
 	@FXML
 	private Button facturaNouaButton;
 	@FXML
@@ -166,14 +167,15 @@ public class IntrariIesiriController implements Initializable {
 		stergeIregistrareButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				Articol a = table2.getSelectionModel().getSelectedItem();
+				InregistrareFactura a = table2.getSelectionModel().getSelectedItem();
 
 				alertConfirm.setTitle("Stergere articol");
 				final Stage stage = (Stage) root.getScene().getWindow();
 				if (alertConfirm.getOwner() != stage)
 					alertConfirm.initOwner(stage);
 				alertConfirm.setHeaderText(null);
-				alertConfirm.setContentText("Sigur doriti sa stergeti articolul " + a.getDenumire() + " ?");
+				alertConfirm
+						.setContentText("Sigur doriti sa stergeti articolul " + a.getArticol().getDenumire() + " ?");
 
 				Optional<ButtonType> result = alertConfirm.showAndWait();
 				if (result.get() == ButtonType.OK) {
@@ -218,7 +220,7 @@ public class IntrariIesiriController implements Initializable {
 
 	private void initTable2() {
 		table2.setPlaceholder(new Label("Aceasta factura nu are niciun articol adaugat."));
-		denumire2.setCellValueFactory(new PropertyValueFactory<>("denumire"));
+		denumire2.setCellValueFactory(new PropertyValueFactory<>("articol"));
 		um.setCellValueFactory(new PropertyValueFactory<>("um"));
 		valoare.setCellValueFactory(new PropertyValueFactory<>("valoare"));
 		cantitate.setCellValueFactory(new PropertyValueFactory<>("cantitate"));
@@ -241,10 +243,10 @@ public class IntrariIesiriController implements Initializable {
 		return observableListFacturi;
 	}
 
-	private ObservableList<Articol> getListArticole(List<Articol> articole) {
+	private ObservableList<InregistrareFactura> getListArticole(List<InregistrareFactura> articole) {
 		table2.getItems().clear();
 		observableListArticole = FXCollections.observableArrayList();
-		for (Articol a : articole) {
+		for (InregistrareFactura a : articole) {
 			if (a.getTip() == TIP) {
 				observableListArticole.add(a);
 			}
@@ -349,7 +351,7 @@ public class IntrariIesiriController implements Initializable {
 				table1.setDisable(false);
 				hbox.setVisible(false);
 				root.toFront();
-				table1.getItems().remove(0);
+				//table1.getItems().remove(0);
 			}
 		});
 
@@ -374,10 +376,10 @@ public class IntrariIesiriController implements Initializable {
 				buttonSalvare, buttonAnulare);
 
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	nrDocument.requestFocus();
-		    }
+			@Override
+			public void run() {
+				nrDocument.requestFocus();
+			}
 		});
 		root.getChildren().add(hbox);
 
@@ -425,7 +427,7 @@ public class IntrariIesiriController implements Initializable {
 
 				if (denumireFirma.getText().equals("") || cui.getText().equals("")) {
 					final Stage stage = (Stage) root.getScene().getWindow();
-					if (alertConfirm.getOwner() != stage)
+					if (alertError.getOwner() != stage)
 						alertError.initOwner(stage);
 					alertError.setHeaderText(null);
 					alertError.setContentText(
@@ -444,6 +446,9 @@ public class IntrariIesiriController implements Initializable {
 					new FirmaController().saveObject(firma);
 
 					hboxFirma.setVisible(false);
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertInfo.getOwner() != stage)
+						alertInfo.initOwner(stage);
 					alertInfo.setTitle("Firma adaugata");
 					alertInfo.setHeaderText(null);
 					alertInfo.setContentText("Firma a fost adaugata cu succes!");
@@ -461,10 +466,10 @@ public class IntrariIesiriController implements Initializable {
 		});
 
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	denumireFirma.requestFocus();
-		    }
+			@Override
+			public void run() {
+				denumireFirma.requestFocus();
+			}
 		});
 
 		hboxFirma.getChildren().addAll(labelDenumireFirma, denumireFirma, labelCui, cui, labelJ, j, labelAlteDetalii,
@@ -477,7 +482,7 @@ public class IntrariIesiriController implements Initializable {
 		HBox hbox = new HBox();
 		hbox.setPadding(new Insets(356, 0, 0, 0));
 		table2.setDisable(true);
-		table2.getItems().add(0, new Articol());
+		table2.getItems().add(0, new InregistrareFactura());
 
 		hbox.toFront();
 		// hbox.setMinHeight(250);
@@ -506,16 +511,32 @@ public class IntrariIesiriController implements Initializable {
 
 		buttonSalvare.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent evt) {
-				Articol articol = new Articol();
-				articol.setDenumire(denumireArticol.getText());
-				articol.setUm(um.getText());
-				articol.setCantitate(Double.parseDouble(cantitate.getText()));
-				articol.setPretUnitate(Double.parseDouble(pretUnitate.getText()));
-				articol.setCotaTVA(Double.parseDouble(tva.getText()));
-				articol.setCont(choiceBox.getValue());
+				InregistrareFactura inregistrareFactura = new InregistrareFactura();
+
+				List<Articol> articole = new ArticolController().selectAll();
+				for (Articol a : articole) {
+					if (a.getDenumire().equals(denumireArticol.getText())) {
+						inregistrareFactura.setArticol(a);
+					}
+				}
+
+				if (inregistrareFactura.getArticol() == null) {
+					Articol articol = new Articol();
+					articol.setDenumire(denumireArticol.getText());
+					inregistrareFactura.setArticol(articol);
+					java.util.Date date = new java.util.Date();
+					Timestamp currentTime = new Timestamp(date.getTime());
+					inregistrareFactura.getArticol().setData(currentTime);
+				}
+
+				inregistrareFactura.setUm(um.getText());
+				inregistrareFactura.setCantitate(Double.parseDouble(cantitate.getText()));
+				inregistrareFactura.setPretUnitate(Double.parseDouble(pretUnitate.getText()));
+				inregistrareFactura.setCotaTVA(Double.parseDouble(tva.getText()));
+				inregistrareFactura.setCont(choiceBox.getValue());
 
 				Factura factura = table1.getSelectionModel().getSelectedItem();
-				factura.getArticole().add(articol);
+				factura.getArticole().add(inregistrareFactura);
 
 				// new ArticolController().saveObject(articol);
 				new FacturaController().saveObject(factura);
@@ -556,12 +577,11 @@ public class IntrariIesiriController implements Initializable {
 				buttonSalvare, buttonAnulare);
 
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		        denumireArticol.requestFocus();
-		    }
+			@Override
+			public void run() {
+				denumireArticol.requestFocus();
+			}
 		});
-
 
 		root.getChildren().add(hbox);
 

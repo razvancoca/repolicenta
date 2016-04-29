@@ -13,8 +13,6 @@ import model.Firma;
 import utils.DBConnection;
 
 public class Login extends Application {
-
-
 	@Override
 	public void start(Stage stage) {
 		Parent root;

@@ -17,6 +17,7 @@
 		<class>model.Factura</class>
 		<class>model.Firma</class>
 		<class>model.Cont</class>
+		<class>model.DenumireArticol</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.url"

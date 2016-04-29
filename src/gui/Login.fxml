@@ -9,7 +9,7 @@
 <AnchorPane minHeight="236.0001220703125" prefHeight="301.0001220703125" prefWidth="508.99977792969" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.LoginController">
   <!-- TODO Add Nodes -->
   <children>
-    <TextField fx:id="txtUsername" layoutX="168.0" layoutY="129.0" prefWidth="200.0" promptText="Introduceti numele de utilizator" />
+	<TextField fx:id="txtUsername" layoutX="168.0" layoutY="129.0" prefWidth="200.0" promptText="Introduceti numele de utilizator" />
     <PasswordField id="txtParola" fx:id="txtPassword" layoutX="168.0" layoutY="173.0" onAction="#btnLoginAction" prefWidth="200.0" promptText="Introduceti parola" />
     <Button fx:id="btnLogin" layoutX="193.0" layoutY="219.0" mnemonicParsing="false" onAction="#btnLoginAction" prefHeight="34.0" prefWidth="110.0" text="Login" />
     <Label layoutX="101.0" layoutY="132.0" text="Username:" />
