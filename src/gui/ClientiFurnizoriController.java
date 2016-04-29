@@ -28,6 +28,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import model.Firma;
 
 public class ClientiFurnizoriController implements Initializable {
@@ -74,7 +75,10 @@ public class ClientiFurnizoriController implements Initializable {
 
 		new FirmaController().saveObject(firma);
 
-		alertInfo.setTitle("Info");
+		final Stage stage = (Stage) root.getScene().getWindow();
+		if(alertInfo.getOwner()!=stage)
+			alertInfo.initOwner(stage);
+		alertInfo.setTitle("Firma adaugata");
 		alertInfo.setHeaderText(null);
 		alertInfo.setContentText("Firma a fost adaugata cu succes!");
 		alertInfo.showAndWait();
@@ -86,6 +90,8 @@ public class ClientiFurnizoriController implements Initializable {
 		Firma firma = tableView1.getSelectionModel().getSelectedItem();
 		if (firma == null) {
 			alertError.setTitle("Eroare");
+			final Stage stage = (Stage) root.getScene().getWindow();
+			if(alertConfirm.getOwner()!=stage)
 			alertError.setHeaderText(null);
 			alertError.setContentText("Nu ati selectat nicio firma!");
 			alertError.showAndWait();
@@ -138,7 +144,6 @@ public class ClientiFurnizoriController implements Initializable {
 	public void modificaFirma() {
 		HBox hbox = new HBox();
 		hbox.setMinHeight(250);
-		// hbox.setStyle("-fx-background-color: #333;");
 		TextField denumire = new TextField();
 		denumire.setPrefWidth(200);
 		TextField cui = new TextField();
@@ -170,6 +175,9 @@ public class ClientiFurnizoriController implements Initializable {
 				if (evt.getClickCount() == 2) {
 					Insets insets = new Insets(evt.getSceneY()-8, 0, 0, 2);
 					alertConfirm.setTitle("Modificare firma");
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if(alertConfirm.getOwner()!=stage)
+					alertConfirm.initOwner(stage);
 					alertConfirm.setHeaderText(null);
 					alertConfirm.setContentText("Doriti sa modificati firma cu denumirea "
 							+ tableView1.getSelectionModel().getSelectedItem().getDenumire() + " ?");
@@ -180,13 +188,13 @@ public class ClientiFurnizoriController implements Initializable {
 						splitPane.setDisable(true);
 						hbox.toFront();
 					}
-
 				}
 			}
 		});
 
 		buttonModifica.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent evt) {
+
 				Firma f = tableView1.getSelectionModel().getSelectedItem();
 				f.setDenumire(denumire.getText());
 				f.setCui(cui.getText());
@@ -203,6 +211,9 @@ public class ClientiFurnizoriController implements Initializable {
 			public void handle(ActionEvent evt) {
 				Firma f = tableView1.getSelectionModel().getSelectedItem();
 				alertConfirm.setTitle("Stergere firma");
+				final Stage stage = (Stage) root.getScene().getWindow();
+				if(alertConfirm.getOwner()!=stage)
+				alertConfirm.initOwner(stage);
 				alertConfirm.setHeaderText(null);
 				alertConfirm.setContentText("Sigur doriti sa stergeti firma cu denumirea "
 						+ f.getDenumire() + " ?");
@@ -215,7 +226,8 @@ public class ClientiFurnizoriController implements Initializable {
 					splitPane.setDisable(false);
 
 				} else {
-					// ... user chose CANCEL or closed the dialog
+					hbox.toBack();
+					splitPane.setDisable(false);
 				}
 
 			}

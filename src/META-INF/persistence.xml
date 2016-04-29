@@ -16,6 +16,7 @@
 		<class>model.Chitanta</class>
 		<class>model.Factura</class>
 		<class>model.Firma</class>
+		<class>model.Cont</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.url"
@@ -30,6 +31,9 @@
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.event.merge.entity_copy_observer" value="allow"/>
+
+
 		</properties>
 	</persistence-unit>
 

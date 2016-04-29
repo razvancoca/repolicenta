@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane minHeight="236.0001220703125" prefHeight="301.0001220703125" prefWidth="508.99977792969" style="-fx-background-color: white;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.LoginController">
+  <!-- TODO Add Nodes -->
+  <children>
+    <TextField fx:id="txtUsername" layoutX="168.0" layoutY="129.0" prefWidth="200.0" promptText="Introduceti numele de utilizator" />
+    <PasswordField id="txtParola" fx:id="txtPassword" layoutX="168.0" layoutY="173.0" onAction="#btnLoginAction" prefWidth="200.0" promptText="Introduceti parola" />
+    <Button fx:id="btnLogin" layoutX="193.0" layoutY="219.0" mnemonicParsing="false" onAction="#btnLoginAction" prefHeight="34.0" prefWidth="110.0" text="Login" />
+    <Label layoutX="101.0" layoutY="132.0" text="Username:" />
+    <Label layoutX="101.0" layoutY="176.0" prefWidth="54.0" text="Parola:" textAlignment="LEFT" />
+    <Label id="lblMessage" layoutX="182.0" layoutY="49.0" prefHeight="52.0" prefWidth="172.0" text="eConta" textAlignment="LEFT" textFill="#3385ff">
+      <font>
+        <Font name="Arial" size="45.0" />
+      </font>
+    </Label>
+    <Label fx:id="label2" layoutX="141.0" layoutY="267.0" prefWidth="227.0" text="" textFill="RED">
+      <font>
+        <Font size="14.0" />
+      </font>
+    </Label>
+  </children>
+</AnchorPane>

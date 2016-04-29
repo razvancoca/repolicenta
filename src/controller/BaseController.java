@@ -12,6 +12,7 @@ import utils.DBConnection;
 public class BaseController <T extends BaseModel> {
 	private final Class<T> clazz;
 
+
 	EntityManagerFactory emf = DBConnection.getInstance().getConnection();
 
 	public BaseController(Class<T> clazz) {
@@ -94,4 +95,6 @@ public class BaseController <T extends BaseModel> {
 			em.close();
 		}
 	}
+
+
 }
