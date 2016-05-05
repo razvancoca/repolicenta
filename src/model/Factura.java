@@ -29,12 +29,16 @@ public class Factura extends BaseModel {
 	@JoinColumn(name = "id_firma")
 	private Firma firma;
 
-	@ManyToOne(cascade = CascadeType.ALL, optional = true)
-	@JoinColumn(name = "id_chitanta")
-	private Chitanta chitanta;
+	@ManyToOne(cascade = CascadeType.ALL, optional = false)
+	@JoinColumn(name = "id_user")
+	private User user;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	List<InregistrareFactura> articole;
+	List<Chitanta> chitante;
+
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "id_inregistrarefactura")
+	private InregistrareFactura inregistrareFactura;
 
 
 	public int getId() {
@@ -105,46 +109,11 @@ public class Factura extends BaseModel {
 		return "---";
 	}
 
-	public Chitanta getChitanta() {
-		return chitanta;
-	}
 
-	public void setChitanta(Chitanta chitanta) {
-		this.chitanta = chitanta;
-	}
-
-	public List<InregistrareFactura> getArticole() {
-		return articole;
-	}
-
-	public void setArticole(List<InregistrareFactura> articole) {
-		this.articole = articole;
-	}
-
-	public Factura(int id, String nrdoc, Timestamp dataDocument, Timestamp dataScadenta, int tip, String idInCategorie,
-			Firma firma, Chitanta chitanta, List<InregistrareFactura> articole) {
-		super();
-		this.id = id;
-		this.nrdoc = nrdoc;
-		this.dataDocument = dataDocument;
-		this.dataScadenta = dataScadenta;
-		this.tip = tip;
-		this.idInCategorie = idInCategorie;
-		this.firma = firma;
-		this.chitanta = chitanta;
-		this.articole = articole;
-	}
 
 	public Factura() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public String toString() {
-		return "Factura [id=" + id + ", nrdoc=" + nrdoc + ", dataDocument=" + dataDocument + ", dataScadenta="
-				+ dataScadenta + ", tip=" + tip + ", firma=" + firma + ", chitanta=" + chitanta + ", articole="
-				+ articole + "]";
 	}
 
 
@@ -165,13 +134,63 @@ public class Factura extends BaseModel {
 	}
 
 	public String getTotalFactura(){
-		double total=0;
-		DecimalFormat df = new DecimalFormat("0.00");
-		if(articole!=null){
-			for(InregistrareFactura a:articole){
-				total+=a.getTotal();
-			}
-		}
-		return df.format(total);
+//		double total=0;
+//		DecimalFormat df = new DecimalFormat("0.00");
+//		if(articole!=null){
+//			for(InregistrareFactura a:articole){
+//				total+=a.getTotal();
+//			}
+//		}
+//		return df.format(total);
+		return 0+"";
 	}
+
+
+	@Override
+	public String toString() {
+		return "Factura [id=" + id + ", nrdoc=" + nrdoc + ", dataDocument=" + dataDocument + ", dataScadenta="
+				+ dataScadenta + ", tip=" + tip + ", idInCategorie=" + idInCategorie + ", firma=" + firma
+				+ ", chitante=" + chitante + ", inregistrareFactura=" + inregistrareFactura + "]";
+	}
+
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Factura(int id, String nrdoc, Timestamp dataDocument, Timestamp dataScadenta, int tip, String idInCategorie,
+			Firma firma, User user, List<Chitanta> chitante, InregistrareFactura inregistrareFactura) {
+		super();
+		this.id = id;
+		this.nrdoc = nrdoc;
+		this.dataDocument = dataDocument;
+		this.dataScadenta = dataScadenta;
+		this.tip = tip;
+		this.idInCategorie = idInCategorie;
+		this.firma = firma;
+		this.user = user;
+		this.chitante = chitante;
+		this.inregistrareFactura = inregistrareFactura;
+	}
+
+	public List<Chitanta> getChitante() {
+		return chitante;
+	}
+
+	public void setChitante(List<Chitanta> chitante) {
+		this.chitante = chitante;
+	}
+
+	public InregistrareFactura getInregistrareFactura() {
+		return inregistrareFactura;
+	}
+
+	public void setInregistrareFactura(InregistrareFactura inregistrareFactura) {
+		this.inregistrareFactura = inregistrareFactura;
+	}
+
 }

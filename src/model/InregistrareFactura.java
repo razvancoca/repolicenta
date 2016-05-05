@@ -30,8 +30,6 @@ public class InregistrareFactura extends BaseModel {
 	@JoinColumn(name = "id_cont")
 	private Cont cont;
 
-	@ManyToMany(mappedBy = "articole", targetEntity = Factura.class, cascade = CascadeType.ALL)
-	private List<Factura> facturi;
 
 	public int getId() {
 		return id;
@@ -89,13 +87,6 @@ public class InregistrareFactura extends BaseModel {
 		this.um = um;
 	}
 
-	public List<Factura> getFacturi() {
-		return facturi;
-	}
-
-	public void setFacturi(List<Factura> facturi) {
-		this.facturi = facturi;
-	}
 
 	public double getValoare() {
 		return cantitate * pretUnitate;
@@ -115,7 +106,7 @@ public class InregistrareFactura extends BaseModel {
 	}
 
 	public InregistrareFactura(int id, int tip, Articol denumireArticol, double cantitate, double pretUnitate,
-			double cotaTVA, String um, Cont cont, List<Factura> facturi) {
+			double cotaTVA, String um, Cont cont) {
 		super();
 		this.id = id;
 		this.tip = tip;
@@ -125,7 +116,6 @@ public class InregistrareFactura extends BaseModel {
 		this.cotaTVA = cotaTVA;
 		this.um = um;
 		this.cont = cont;
-		this.facturi = facturi;
 	}
 
 	public Cont getCont() {
