@@ -2,6 +2,7 @@ package model;
 
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import controller.InregistrareFacturaController;
 
 @Entity
 public class Factura extends BaseModel {
@@ -35,10 +38,6 @@ public class Factura extends BaseModel {
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	List<Chitanta> chitante;
-
-	@ManyToOne(cascade = CascadeType.ALL, optional = true)
-	@JoinColumn(name = "id_inregistrarefactura")
-	private InregistrareFactura inregistrareFactura;
 
 
 	public int getId() {
@@ -134,23 +133,15 @@ public class Factura extends BaseModel {
 	}
 
 	public String getTotalFactura(){
-//		double total=0;
-//		DecimalFormat df = new DecimalFormat("0.00");
-//		if(articole!=null){
-//			for(InregistrareFactura a:articole){
-//				total+=a.getTotal();
-//			}
-//		}
-//		return df.format(total);
-		return 0+"";
-	}
-
-
-	@Override
-	public String toString() {
-		return "Factura [id=" + id + ", nrdoc=" + nrdoc + ", dataDocument=" + dataDocument + ", dataScadenta="
-				+ dataScadenta + ", tip=" + tip + ", idInCategorie=" + idInCategorie + ", firma=" + firma
-				+ ", chitante=" + chitante + ", inregistrareFactura=" + inregistrareFactura + "]";
+		List<InregistrareFactura> list = new InregistrareFacturaController().selectAll();
+		double sum=0;
+		for(InregistrareFactura iff:list){
+			if(iff.getFactura().getId()==id){
+				sum+=iff.getTotal();
+			}
+		}
+		DecimalFormat df = new DecimalFormat("0.00");
+		return df.format(sum);
 	}
 
 
@@ -163,7 +154,7 @@ public class Factura extends BaseModel {
 	}
 
 	public Factura(int id, String nrdoc, Timestamp dataDocument, Timestamp dataScadenta, int tip, String idInCategorie,
-			Firma firma, User user, List<Chitanta> chitante, InregistrareFactura inregistrareFactura) {
+			Firma firma, User user, List<Chitanta> chitante) {
 		super();
 		this.id = id;
 		this.nrdoc = nrdoc;
@@ -174,7 +165,6 @@ public class Factura extends BaseModel {
 		this.firma = firma;
 		this.user = user;
 		this.chitante = chitante;
-		this.inregistrareFactura = inregistrareFactura;
 	}
 
 	public List<Chitanta> getChitante() {
@@ -185,12 +175,17 @@ public class Factura extends BaseModel {
 		this.chitante = chitante;
 	}
 
-	public InregistrareFactura getInregistrareFactura() {
-		return inregistrareFactura;
-	}
 
-	public void setInregistrareFactura(InregistrareFactura inregistrareFactura) {
-		this.inregistrareFactura = inregistrareFactura;
-	}
+	public List<InregistrareFactura> getArticole(){
+		List<InregistrareFactura> temp = new InregistrareFacturaController().selectAll();
+		List<InregistrareFactura> list = new ArrayList<InregistrareFactura>();
 
+		for(InregistrareFactura i: list){
+			if(i.getFactura().equals(this)){
+				list.add(i);
+			}
+		}
+		return list;
+
+	}
 }

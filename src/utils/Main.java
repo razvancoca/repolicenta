@@ -46,8 +46,10 @@ public class Main {
 //		New ChitantaController().saveObject(chitanta);
 //		New FacturaController().saveObject(f);
 
-		DBConnection.getInstance().closeConnection();
+		Factura f = new FacturaController().getById(1);
+		System.out.println(new InregistrareFacturaController().getInregistrariByFactura(f));
 
+		DBConnection.getInstance().closeConnection();
 	}
 
 }

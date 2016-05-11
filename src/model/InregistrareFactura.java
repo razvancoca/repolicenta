@@ -30,6 +30,9 @@ public class InregistrareFactura extends BaseModel {
 	@JoinColumn(name = "id_cont")
 	private Cont cont;
 
+	@ManyToOne(cascade = CascadeType.ALL, optional = true)
+	@JoinColumn(name = "id_factura")
+	private Factura factura;
 
 	public int getId() {
 		return id;
@@ -51,8 +54,8 @@ public class InregistrareFactura extends BaseModel {
 		return articol;
 	}
 
-	public void setArticol(Articol denumireArticol) {
-		this.articol = denumireArticol;
+	public void setArticol(Articol articol) {
+		this.articol = articol;
 	}
 
 	public double getCantitate() {
@@ -71,8 +74,8 @@ public class InregistrareFactura extends BaseModel {
 		this.pretUnitate = pretUnitate;
 	}
 
-	public String getCotaTVA() {
-		return (int) cotaTVA + "%";
+	public double getCotaTVA() {
+		return cotaTVA;
 	}
 
 	public void setCotaTVA(double cotaTVA) {
@@ -87,37 +90,6 @@ public class InregistrareFactura extends BaseModel {
 		this.um = um;
 	}
 
-
-	public double getValoare() {
-		return cantitate * pretUnitate;
-	}
-
-	public double getTotal() {
-		return getValoare() + getValoare() * cotaTVA / 100;
-	}
-
-	public double getValoareTVA() {
-		return getValoare() * cotaTVA / 100;
-	}
-
-	public InregistrareFactura() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public InregistrareFactura(int id, int tip, Articol denumireArticol, double cantitate, double pretUnitate,
-			double cotaTVA, String um, Cont cont) {
-		super();
-		this.id = id;
-		this.tip = tip;
-		this.articol = denumireArticol;
-		this.cantitate = cantitate;
-		this.pretUnitate = pretUnitate;
-		this.cotaTVA = cotaTVA;
-		this.um = um;
-		this.cont = cont;
-	}
-
 	public Cont getCont() {
 		return cont;
 	}
@@ -126,8 +98,42 @@ public class InregistrareFactura extends BaseModel {
 		this.cont = cont;
 	}
 
-	@Override
-	public String toString() {
-		return articol.getDenumire();
+	public Factura getFactura() {
+		return factura;
+	}
+
+	public void setFactura(Factura factura) {
+		this.factura = factura;
+	}
+
+	public InregistrareFactura(int id, int tip, Articol articol, double cantitate, double pretUnitate, double cotaTVA,
+			String um, Cont cont, Factura factura) {
+		super();
+		this.id = id;
+		this.tip = tip;
+		this.articol = articol;
+		this.cantitate = cantitate;
+		this.pretUnitate = pretUnitate;
+		this.cotaTVA = cotaTVA;
+		this.um = um;
+		this.cont = cont;
+		this.factura = factura;
+	}
+
+	public InregistrareFactura() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public double getValoare(){
+		return cantitate*pretUnitate;
+	}
+
+	public double getValoareTVA(){
+		return getValoare()*cotaTVA/100;
+	}
+	public double getTotal(){
+		return getValoare()+getValoareTVA();
 	}
 }

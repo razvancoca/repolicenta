@@ -13,6 +13,8 @@ import controller.ArticolController;
 import controller.ContController;
 import controller.FacturaController;
 import controller.FirmaController;
+import controller.InregistrareFacturaController;
+import controller.UserController;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -115,9 +117,9 @@ public class IntrariIesiriController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		if (tipLabel.getText().equals("intrare")) {
-			TIP = 1;
-		} else {
 			TIP = 0;
+		} else {
+			TIP = 1;
 		}
 		initTable1();
 		initTable2();
@@ -161,6 +163,7 @@ public class IntrariIesiriController implements Initializable {
 				table2.getSelectionModel().select(observableListArticole.size() - 1);
 				table2.setDisable(true);
 				adaugaArticol();
+
 			}
 		});
 
@@ -180,8 +183,8 @@ public class IntrariIesiriController implements Initializable {
 				Optional<ButtonType> result = alertConfirm.showAndWait();
 				if (result.get() == ButtonType.OK) {
 					table2.getItems().remove(a);
-					table1.getSelectionModel().getSelectedItem().getArticole().remove(a);
-					new FacturaController().saveObject(table1.getSelectionModel().getSelectedItem());
+					new InregistrareFacturaController().delete(a.getId());
+					table1.setItems(getListFacturi());
 				}
 
 			}
@@ -212,7 +215,7 @@ public class IntrariIesiriController implements Initializable {
 			if (newSelection != null) {
 				table2.getSelectionModel().clearSelection();
 				if (table1.getSelectionModel().getSelectedItem().getArticole() != null) {
-					table2.setItems(getListArticole(table1.getSelectionModel().getSelectedItem().getArticole()));
+					table2.setItems(getListArticole(table1.getSelectionModel().getSelectedItem()));
 				}
 			}
 		});
@@ -243,12 +246,13 @@ public class IntrariIesiriController implements Initializable {
 		return observableListFacturi;
 	}
 
-	private ObservableList<InregistrareFactura> getListArticole(List<InregistrareFactura> articole) {
+	private ObservableList<InregistrareFactura> getListArticole(Factura f) {
 		table2.getItems().clear();
 		observableListArticole = FXCollections.observableArrayList();
-		for (InregistrareFactura a : articole) {
-			if (a.getTip() == TIP) {
-				observableListArticole.add(a);
+		List<InregistrareFactura> inregistrariFactura = new InregistrareFacturaController().getInregistrariByFactura(f);
+		for (InregistrareFactura iff : inregistrariFactura) {
+			if (iff.getTip()==TIP ) {
+				observableListArticole.add(iff);
 			}
 		}
 		return observableListArticole;
@@ -267,10 +271,10 @@ public class IntrariIesiriController implements Initializable {
 
 	public String getMaxIdInCateg() {
 		List<Factura> listaFacturi = new FacturaController().selectAll();
-		int max = 1;
+		int max = 0;
 		for (Factura a : listaFacturi) {
-			if (Integer.parseInt(a.getIdInCategorie()) > max)
-				max = Integer.parseInt(a.getIdInCategorie());
+			if (a.getTip()==TIP)
+				max++;
 		}
 		max++;
 		return max + "";
@@ -342,6 +346,8 @@ public class IntrariIesiriController implements Initializable {
 
 					f.setDataDocument(timeStampDataDocument);
 					f.setDataScadenta(timeStampDataScadenta);
+					f.setUser(new UserController().getById(1));
+					f.setTip(TIP);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -512,6 +518,7 @@ public class IntrariIesiriController implements Initializable {
 		buttonSalvare.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent evt) {
 				InregistrareFactura inregistrareFactura = new InregistrareFactura();
+				Factura factura = table1.getSelectionModel().getSelectedItem();
 
 				List<Articol> articole = new ArticolController().selectAll();
 				for (Articol a : articole) {
@@ -523,10 +530,11 @@ public class IntrariIesiriController implements Initializable {
 				if (inregistrareFactura.getArticol() == null) {
 					Articol articol = new Articol();
 					articol.setDenumire(denumireArticol.getText());
-					inregistrareFactura.setArticol(articol);
 					java.util.Date date = new java.util.Date();
 					Timestamp currentTime = new Timestamp(date.getTime());
-					inregistrareFactura.getArticol().setData(currentTime);
+					articol.setData(currentTime);
+					//new ArticolController().saveObject(articol);
+					inregistrareFactura.setArticol(articol);
 				}
 
 				inregistrareFactura.setUm(um.getText());
@@ -534,14 +542,13 @@ public class IntrariIesiriController implements Initializable {
 				inregistrareFactura.setPretUnitate(Double.parseDouble(pretUnitate.getText()));
 				inregistrareFactura.setCotaTVA(Double.parseDouble(tva.getText()));
 				inregistrareFactura.setCont(choiceBox.getValue());
+				inregistrareFactura.setFactura(factura);
+				inregistrareFactura.setTip(TIP);
 
-				Factura factura = table1.getSelectionModel().getSelectedItem();
-				factura.getArticole().add(inregistrareFactura);
+				new InregistrareFacturaController().saveObject(inregistrareFactura);
 
-				// new ArticolController().saveObject(articol);
-				new FacturaController().saveObject(factura);
 
-				table2.setItems(getListArticole(table1.getSelectionModel().getSelectedItem().getArticole()));
+				table2.setItems(getListArticole(table1.getSelectionModel().getSelectedItem()));
 				table2.setDisable(false);
 				hbox.setVisible(false);
 				root.toFront();
@@ -560,9 +567,13 @@ public class IntrariIesiriController implements Initializable {
 
 		pretUnitate.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
-				double valoareDouble = Double.parseDouble(pretUnitate.getText())
-						* Double.parseDouble(cantitate.getText());
-				valoare.setText(valoareDouble + "");
+				try{
+					double valoareDouble = Double.parseDouble(pretUnitate.getText())
+							* Double.parseDouble(cantitate.getText());
+					valoare.setText(valoareDouble + "");
+				}catch(NumberFormatException ex){
+					System.out.println("String gol");
+				}
 			}
 		});
 
