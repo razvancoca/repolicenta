@@ -50,7 +50,7 @@
 			</columns>
 		</TableView>
 		<Label layoutX="14.0" layoutY="11.0" text="Facturi de" />
-		<Label fx:id="tipLabel" layoutX="70.0" layoutY="11.0" text="$tip" />
+		<Label fx:id="tipLabel" layoutX="70.0" layoutY="11.0" text="intrari" />
 		<Button fx:id="facturaNouaButton" layoutX="196.0" layoutY="6.0"
 			mnemonicParsing="false" text="Factura noua" />
 		<Button id="facturaNouaButton" fx:id="stergeFactura" layoutX="288.0"

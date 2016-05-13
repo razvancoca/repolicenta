@@ -4,10 +4,13 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import org.hibernate.type.TimestampType;
 
 import controller.ArticolController;
 import controller.ContController;
@@ -18,6 +21,8 @@ import controller.UserController;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,6 +35,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -229,7 +235,7 @@ public class IntrariIesiriController implements Initializable {
 		cantitate.setCellValueFactory(new PropertyValueFactory<>("cantitate"));
 		pretUnitate.setCellValueFactory(new PropertyValueFactory<>("pretUnitate"));
 		TVA.setCellValueFactory(new PropertyValueFactory<>("cotaTVA"));
-		total.setCellValueFactory(new PropertyValueFactory<>("total"));
+		total.setCellValueFactory(new PropertyValueFactory<>("totalString"));
 		valoareTVA.setCellValueFactory(new PropertyValueFactory<>("valoareTVA"));
 		cont.setCellValueFactory(new PropertyValueFactory<>("cont"));
 	}
@@ -251,7 +257,7 @@ public class IntrariIesiriController implements Initializable {
 		observableListArticole = FXCollections.observableArrayList();
 		List<InregistrareFactura> inregistrariFactura = new InregistrareFacturaController().getInregistrariByFactura(f);
 		for (InregistrareFactura iff : inregistrariFactura) {
-			if (iff.getTip()==TIP ) {
+			if (iff.getTip() == TIP) {
 				observableListArticole.add(iff);
 			}
 		}
@@ -269,17 +275,6 @@ public class IntrariIesiriController implements Initializable {
 		return observableListFirme;
 	}
 
-	public String getMaxIdInCateg() {
-		List<Factura> listaFacturi = new FacturaController().selectAll();
-		int max = 0;
-		for (Factura a : listaFacturi) {
-			if (a.getTip()==TIP)
-				max++;
-		}
-		max++;
-		return max + "";
-	}
-
 	private void getSelectedRowFunction() {
 		table1.setRowFactory(tableView -> {
 			TableRow<Factura> row = new TableRow<Factura>();
@@ -293,7 +288,6 @@ public class IntrariIesiriController implements Initializable {
 	}
 
 	public void adaugaFactura() {
-
 		HBox hbox = new HBox();
 		hbox.setPadding(new Insets(60, 0, 0, 0));
 		table1.setDisable(true);
@@ -308,12 +302,12 @@ public class IntrariIesiriController implements Initializable {
 		ChoiceBox<Firma> choiceBox = new ChoiceBox<>();
 		choiceBox.setItems(getListFirme());
 		choiceBox.setPrefWidth(250);
-		TextField dataDocument = new TextField();
+		DatePicker dataDocument = new DatePicker();
 		dataDocument.setPrefWidth(120);
-		TextField dataScadenta = new TextField();
+		DatePicker dataScadenta = new DatePicker();
 		dataScadenta.setPrefWidth(120);
 
-		nrCrt.setText(getMaxIdInCateg());
+		nrCrt.setText(observableListFacturi.size() + "");
 		nrCrt.setEditable(false);
 
 		Button buttonSalvare = new Button("Salvare");
@@ -324,40 +318,37 @@ public class IntrariIesiriController implements Initializable {
 		buttonFirmaNoua.setMinWidth(114);
 		hbox.setMargin(buttonFirmaNoua, new Insets(0, 3, 0, 3));
 
-		java.util.Date date = new java.util.Date();
-		Timestamp currentTime = new Timestamp(date.getTime());
-		dataDocument.setText(new java.text.SimpleDateFormat("dd.MM.yyyy").format(currentTime));
-		dataScadenta.setText(new java.text.SimpleDateFormat("dd.MM.yyyy").format(currentTime));
+		dataDocument.setValue(LocalDate.now());
+		dataScadenta.setValue(LocalDate.now());
 
 		buttonSalvare.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent evt) {
 				Factura f = new Factura();
-				f.setIdInCategorie(nrCrt.getText());
-				f.setNrdoc(nrDocument.getText());
-				f.setFirma(choiceBox.getSelectionModel().getSelectedItem());
 
-				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-				try {
-					Date date1 = (Date) sdf.parse(dataDocument.getText());
-					Date date2 = (Date) sdf.parse(dataScadenta.getText());
+				if (choiceBox.getSelectionModel().getSelectedItem() != null && !nrDocument.getText().equals("")) {
+					f.setIdInCategorie(nrCrt.getText());
+					f.setNrdoc(nrDocument.getText());
+					f.setFirma(choiceBox.getSelectionModel().getSelectedItem());
 
-					java.sql.Timestamp timeStampDataDocument = new Timestamp(date1.getTime());
-					java.sql.Timestamp timeStampDataScadenta = new Timestamp(date2.getTime());
-
-					f.setDataDocument(timeStampDataDocument);
-					f.setDataScadenta(timeStampDataScadenta);
+					f.setDataDocument(Timestamp.valueOf(dataDocument.getValue().atStartOfDay()));
+					f.setDataScadenta(Timestamp.valueOf(dataScadenta.getValue().atStartOfDay()));
 					f.setUser(new UserController().getById(1));
 					f.setTip(TIP);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					new FacturaController().saveObject(f);
+					initTable1();
+					table1.setDisable(false);
+					hbox.setVisible(false);
+					root.toFront();
+				} else {
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu ati completat campurile obligatorii!");
+					alertError.show();
 				}
-				new FacturaController().saveObject(f);
-				initTable1();
-				table1.setDisable(false);
-				hbox.setVisible(false);
-				root.toFront();
-				//table1.getItems().remove(0);
+
+				// table1.getItems().remove(0);
 			}
 		});
 
@@ -436,11 +427,8 @@ public class IntrariIesiriController implements Initializable {
 					if (alertError.getOwner() != stage)
 						alertError.initOwner(stage);
 					alertError.setHeaderText(null);
-					alertError.setContentText(
-							"Nu ati completat campurile obligatorii! Firma nu a fost salvata in baza de date.");
+					alertError.setContentText("Nu ati completat campurile obligatorii!");
 					alertError.showAndWait();
-					hboxFirma.setVisible(false);
-
 				} else {
 					Firma firma = new Firma();
 					firma.setDenumire(denumireFirma.getText());
@@ -502,10 +490,11 @@ public class IntrariIesiriController implements Initializable {
 		TextField pretUnitate = new TextField();
 		pretUnitate.setPrefWidth(75);
 		TextField valoare = new TextField();
-		valoare.setPrefWidth(65);
+		valoare.setPrefWidth(75);
 		TextField tva = new TextField("20");
-		Label labelTva = new Label("%");
-		tva.setPrefWidth(75);
+		Label labelTva = new Label("  %");
+		labelTva.setPrefWidth(45);
+		tva.setPrefWidth(35);
 		ChoiceBox<Cont> choiceBox = new ChoiceBox<>();
 		choiceBox.setItems(getListCont());
 		choiceBox.setPrefWidth(46);
@@ -517,41 +506,52 @@ public class IntrariIesiriController implements Initializable {
 
 		buttonSalvare.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent evt) {
-				InregistrareFactura inregistrareFactura = new InregistrareFactura();
-				Factura factura = table1.getSelectionModel().getSelectedItem();
 
-				List<Articol> articole = new ArticolController().selectAll();
-				for (Articol a : articole) {
-					if (a.getDenumire().equals(denumireArticol.getText())) {
-						inregistrareFactura.setArticol(a);
+				if (!denumireArticol.getText().equals("") && !cantitate.getText().equals("")
+						&& !valoare.getText().equals("")) {
+					InregistrareFactura inregistrareFactura = new InregistrareFactura();
+					Factura factura = table1.getSelectionModel().getSelectedItem();
+
+					List<Articol> articole = new ArticolController().selectAll();
+					for (Articol a : articole) {
+						if (a.getDenumire().equals(denumireArticol.getText())) {
+							inregistrareFactura.setArticol(a);
+						}
 					}
+
+					if (inregistrareFactura.getArticol() == null) {
+						Articol articol = new Articol();
+						articol.setDenumire(denumireArticol.getText());
+						java.util.Date date = new java.util.Date();
+						Timestamp currentTime = new Timestamp(date.getTime());
+						articol.setData(currentTime);
+						inregistrareFactura.setArticol(articol);
+					}
+
+					inregistrareFactura.setUm(um.getText());
+					inregistrareFactura.setCantitate(Double.parseDouble(cantitate.getText()));
+					inregistrareFactura.setPretUnitate(Double.parseDouble(pretUnitate.getText()));
+					inregistrareFactura.setCotaTVA(Double.parseDouble(tva.getText()));
+					inregistrareFactura.setCont(choiceBox.getValue());
+					inregistrareFactura.setFactura(factura);
+					inregistrareFactura.setTip(TIP);
+
+					new InregistrareFacturaController().saveObject(inregistrareFactura);
+
+					table2.setItems(getListArticole(table1.getSelectionModel().getSelectedItem()));
+					table2.setDisable(false);
+					hbox.setVisible(false);
+					table1.setItems(getListFacturi());
+					root.toFront();
+				} else {
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu ati completat corect datele inregistrarii!");
+					alertError.show();
 				}
 
-				if (inregistrareFactura.getArticol() == null) {
-					Articol articol = new Articol();
-					articol.setDenumire(denumireArticol.getText());
-					java.util.Date date = new java.util.Date();
-					Timestamp currentTime = new Timestamp(date.getTime());
-					articol.setData(currentTime);
-					//new ArticolController().saveObject(articol);
-					inregistrareFactura.setArticol(articol);
-				}
-
-				inregistrareFactura.setUm(um.getText());
-				inregistrareFactura.setCantitate(Double.parseDouble(cantitate.getText()));
-				inregistrareFactura.setPretUnitate(Double.parseDouble(pretUnitate.getText()));
-				inregistrareFactura.setCotaTVA(Double.parseDouble(tva.getText()));
-				inregistrareFactura.setCont(choiceBox.getValue());
-				inregistrareFactura.setFactura(factura);
-				inregistrareFactura.setTip(TIP);
-
-				new InregistrareFacturaController().saveObject(inregistrareFactura);
-
-
-				table2.setItems(getListArticole(table1.getSelectionModel().getSelectedItem()));
-				table2.setDisable(false);
-				hbox.setVisible(false);
-				root.toFront();
 			}
 		});
 
@@ -567,20 +567,110 @@ public class IntrariIesiriController implements Initializable {
 
 		pretUnitate.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
-				try{
-					double valoareDouble = Double.parseDouble(pretUnitate.getText())
-							* Double.parseDouble(cantitate.getText());
-					valoare.setText(valoareDouble + "");
-				}catch(NumberFormatException ex){
-					System.out.println("String gol");
+				try {
+					if (!pretUnitate.getText().equals("")) {
+						double valoareDouble = Double.parseDouble(pretUnitate.getText())
+								* Double.parseDouble(cantitate.getText());
+						valoare.setText(valoareDouble + "");
+					}
+
+				} catch (NumberFormatException ex) {
+					pretUnitate.setText("0");
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText("Pret unitate");
+					alertError.setContentText("Nu puteti introduce decat valori numerice!");
+					alertError.show();
 				}
 			}
 		});
 
 		valoare.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
-				double valoareDouble = Double.parseDouble(valoare.getText()) / Double.parseDouble(cantitate.getText());
-				pretUnitate.setText(valoareDouble + "");
+				try {
+					double valoareDouble = Double.parseDouble(valoare.getText())
+							/ Double.parseDouble(cantitate.getText());
+					pretUnitate.setText(valoareDouble + "");
+				} catch (NumberFormatException ex) {
+					valoare.setText("0");
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText("Valoare");
+					alertError.setContentText("Nu puteti introduce decat valori numerice!");
+					alertError.show();
+				}
+			}
+		});
+
+		// pretUnitate.textProperty().addListener(new ChangeListener<String>() {
+		// @Override
+		// public void changed(ObservableValue<? extends String> observable,
+		// String oldValue, String newValue) {
+		//
+		// try {
+		// Double.parseDouble(newValue);
+		// pretUnitate.setText(newValue);
+		// double valoareDouble = Double.parseDouble(newValue) *
+		// Double.parseDouble(cantitate.getText());
+		// valoare.setText(valoareDouble + "");
+		// } catch (Exception e) {
+		// Platform.runLater(() -> {
+		// pretUnitate.clear();
+		// });
+		// final Stage stage = (Stage) root.getScene().getWindow();
+		// if (alertError.getOwner() != stage)
+		// alertError.initOwner(stage);
+		// alertError.setHeaderText(null);
+		// alertError.setContentText("Nu puteti introduce decat valori
+		// numerice!");
+		// }
+		// }
+		// });
+		//
+		// valoare.textProperty().addListener(new ChangeListener<String>() {
+		// @Override
+		// public void changed(ObservableValue<? extends String> observable,
+		// String oldValue, String newValue) {
+		//
+		// try {
+		// Double.parseDouble(newValue);
+		// valoare.setText(newValue);
+		// double valoareDouble = Double.parseDouble(newValue) /
+		// Double.parseDouble(cantitate.getText());
+		// pretUnitate.setText(valoareDouble + "");
+		// } catch (Exception e) {
+		// Platform.runLater(() -> {
+		// valoare.clear();
+		// });
+		// final Stage stage = (Stage) root.getScene().getWindow();
+		// if (alertError.getOwner() != stage)
+		// alertError.initOwner(stage);
+		// alertError.setHeaderText(null);
+		// alertError.setContentText("Nu puteti introduce decat valori
+		// numerice!");
+		// }
+		// }
+		// });
+
+		cantitate.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+				try {
+					Double.parseDouble(newValue);
+					cantitate.setText(newValue);
+				} catch (Exception e) {
+					Platform.runLater(() -> {
+						cantitate.clear();
+					});
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu puteti introduce decat valori numerice!");
+				}
 			}
 		});
 

@@ -1,5 +1,6 @@
 package model;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -135,5 +136,10 @@ public class InregistrareFactura extends BaseModel {
 	}
 	public double getTotal(){
 		return getValoare()+getValoareTVA();
+	}
+
+	public String getTotalString(){
+		DecimalFormat df = new DecimalFormat("0.00");
+		return df.format(getValoare()+getValoareTVA());
 	}
 }
