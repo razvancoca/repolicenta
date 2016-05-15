@@ -10,6 +10,9 @@ public class DBConnection {
 	private static DBConnection singleton;
 	private static EntityManager em;
 
+	private DBConnection(){
+
+	}
 	public static DBConnection getInstance() {
 		if (singleton == null) {
 			singleton = new DBConnection();

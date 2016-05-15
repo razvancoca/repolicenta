@@ -166,9 +166,13 @@ public class IntrariIesiriController implements Initializable {
 		adaugaArticolButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				table2.getSelectionModel().select(observableListArticole.size() - 1);
-				table2.setDisable(true);
-				adaugaArticol();
+				try {
+					table2.getSelectionModel().select(observableListArticole.size() - 1);
+					table2.setDisable(true);
+					adaugaArticol();
+				} catch (Exception ex) {
+					System.out.println("Nu ati selectat o factura!");
+				}
 
 			}
 		});
@@ -511,7 +515,7 @@ public class IntrariIesiriController implements Initializable {
 						&& !valoare.getText().equals("")) {
 					InregistrareFactura inregistrareFactura = new InregistrareFactura();
 					Factura factura = table1.getSelectionModel().getSelectedItem();
-
+					int idSeleectat = table1.getSelectionModel().getSelectedIndex();
 					List<Articol> articole = new ArticolController().selectAll();
 					for (Articol a : articole) {
 						if (a.getDenumire().equals(denumireArticol.getText())) {
@@ -538,11 +542,13 @@ public class IntrariIesiriController implements Initializable {
 
 					new InregistrareFacturaController().saveObject(inregistrareFactura);
 
-					table2.setItems(getListArticole(table1.getSelectionModel().getSelectedItem()));
+					table2.setItems(getListArticole(factura));
 					table2.setDisable(false);
 					hbox.setVisible(false);
 					table1.setItems(getListFacturi());
 					root.toFront();
+					table1.getSelectionModel().select(idSeleectat);
+
 				} else {
 					final Stage stage = (Stage) root.getScene().getWindow();
 					if (alertError.getOwner() != stage)

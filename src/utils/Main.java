@@ -21,6 +21,8 @@ public class Main {
 
 		DBConnection.getInstance().getConnection();
 		DBConnection.getInstance().openConnection();
+		DBConnection.getInstance().closeConnection();
+
 
 //		List<Articol> Articole = New ArrayList<>();
 //		List<Factura>intrari = New ArrayList<>();
@@ -46,10 +48,9 @@ public class Main {
 //		New ChitantaController().saveObject(chitanta);
 //		New FacturaController().saveObject(f);
 
-		Factura f = new FacturaController().getById(1);
-		System.out.println(new InregistrareFacturaController().getInregistrariByFactura(f));
+//		Factura f = new FacturaController().getById(1);
+//		System.out.println(new InregistrareFacturaController().getInregistrariByFactura(f));
 
-		DBConnection.getInstance().closeConnection();
 	}
 
 }
