@@ -2,15 +2,10 @@ package gui;
 
 import java.net.URL;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import org.hibernate.type.TimestampType;
 
 import controller.ArticolController;
 import controller.ContController;
@@ -119,6 +114,10 @@ public class IntrariIesiriController implements Initializable {
 	private Button adaugaArticolButton;
 	@FXML
 	private Button stergeIregistrareButton;
+	@FXML
+	private Button editeazaFacturaButton;
+	@FXML
+	private Button modificaInregistrareButton;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -139,6 +138,15 @@ public class IntrariIesiriController implements Initializable {
 				table1.getSelectionModel().select(observableListFacturi.size() - 1);
 				table1.setDisable(true);
 				adaugaFactura();
+			}
+		});
+
+		editeazaFacturaButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				modificaFactura(table1.getSelectionModel().getSelectedItem());
+				table1.getSelectionModel().select(observableListFacturi.size() - 1);
+				table1.setDisable(true);
 			}
 		});
 
@@ -166,40 +174,73 @@ public class IntrariIesiriController implements Initializable {
 		adaugaArticolButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				try {
+				if (table1.getSelectionModel().getSelectedIndex() == -1) {
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu ati selectat nicio factura");
+					alertError.show();
+				} else {
 					table2.getSelectionModel().select(observableListArticole.size() - 1);
 					table2.setDisable(true);
-					adaugaArticol();
-				} catch (Exception ex) {
-					System.out.println("Nu ati selectat o factura!");
+					adaugaInregistrare();
 				}
-
 			}
 		});
 
 		stergeIregistrareButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				InregistrareFactura a = table2.getSelectionModel().getSelectedItem();
+				int idSeleectat = table1.getSelectionModel().getSelectedIndex();
 
-				alertConfirm.setTitle("Stergere articol");
-				final Stage stage = (Stage) root.getScene().getWindow();
-				if (alertConfirm.getOwner() != stage)
-					alertConfirm.initOwner(stage);
-				alertConfirm.setHeaderText(null);
-				alertConfirm
-						.setContentText("Sigur doriti sa stergeti articolul " + a.getArticol().getDenumire() + " ?");
+				if (table2.getSelectionModel().getSelectedIndex() == -1) {
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu ati selectat niciun articol");
+					alertError.show();
+				} else {
+					InregistrareFactura a = table2.getSelectionModel().getSelectedItem();
 
-				Optional<ButtonType> result = alertConfirm.showAndWait();
-				if (result.get() == ButtonType.OK) {
-					table2.getItems().remove(a);
-					new InregistrareFacturaController().delete(a.getId());
-					table1.setItems(getListFacturi());
+					alertConfirm.setTitle("Stergere articol");
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertConfirm.getOwner() != stage)
+						alertConfirm.initOwner(stage);
+					alertConfirm.setHeaderText(null);
+					alertConfirm.setContentText(
+							"Sigur doriti sa stergeti articolul " + a.getArticol().getDenumire() + " ?");
+
+					Optional<ButtonType> result = alertConfirm.showAndWait();
+					if (result.get() == ButtonType.OK) {
+						table2.getItems().remove(a);
+						new InregistrareFacturaController().delete(a.getId());
+						table1.setItems(getListFacturi());
+						table1.getSelectionModel().select(idSeleectat);
+					}
 				}
 
 			}
 		});
 
+		modificaInregistrareButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				if (table2.getSelectionModel().getSelectedIndex() == -1) {
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu ati selectat niciun articol");
+					alertError.show();
+				} else {
+					modificaInregistrare(table2.getSelectionModel().getSelectedItem());
+					table2.getSelectionModel().select(observableListArticole.size() - 1);
+					table2.setDisable(true);
+				}
+			}
+		});
 	}
 
 	private void initTable1() {
@@ -343,6 +384,108 @@ public class IntrariIesiriController implements Initializable {
 					table1.setDisable(false);
 					hbox.setVisible(false);
 					root.toFront();
+					table1.getSelectionModel().selectLast();
+					table1.scrollTo(table1.getItems().size() - 1);
+
+				} else {
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu ati completat campurile obligatorii!");
+					alertError.show();
+				}
+
+				// table1.getItems().remove(0);
+			}
+		});
+
+		buttonAnulare.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent evt) {
+				table1.getItems().remove(0);
+				table1.setDisable(false);
+				hbox.setVisible(false);
+				root.toFront();
+
+			}
+		});
+
+		buttonFirmaNoua.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent evt) {
+				adaugaFirma(choiceBox);
+
+			}
+		});
+
+		hbox.getChildren().addAll(nrCrt, nrDocument, choiceBox, buttonFirmaNoua, dataDocument, dataScadenta,
+				buttonSalvare, buttonAnulare);
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				nrDocument.requestFocus();
+			}
+		});
+		root.getChildren().add(hbox);
+
+	}
+
+	public void modificaFactura(Factura factura) {
+		HBox hbox = new HBox();
+		hbox.setPadding(new Insets(60, 0, 0, 0));
+		table1.setDisable(true);
+		table1.getItems().add(0, factura);
+
+		hbox.toFront();
+		// hbox.setMinHeight(250);
+		TextField nrCrt = new TextField();
+		nrCrt.setPrefWidth(53);
+		TextField nrDocument = new TextField();
+		nrDocument.setPrefWidth(89);
+		ChoiceBox<Firma> choiceBox = new ChoiceBox<>();
+
+		choiceBox.setPrefWidth(250);
+		DatePicker dataDocument = new DatePicker();
+		dataDocument.setPrefWidth(120);
+		DatePicker dataScadenta = new DatePicker();
+		dataScadenta.setPrefWidth(120);
+		nrCrt.setEditable(false);
+
+		Button buttonSalvare = new Button("Salvare");
+		Button buttonAnulare = new Button("Anulare");
+		Button buttonFirmaNoua = new Button("Firma noua");
+		buttonSalvare.setMinWidth(100);
+		buttonAnulare.setMinWidth(80);
+		buttonFirmaNoua.setMinWidth(114);
+		hbox.setMargin(buttonFirmaNoua, new Insets(0, 3, 0, 3));
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				nrDocument.setText(factura.getNrdoc());
+				nrCrt.setText(factura.getIdInCategorie());
+				choiceBox.setItems(getListFirme());
+				choiceBox.getSelectionModel().select(getFirmaComparata(factura, choiceBox.getItems()));
+				dataDocument.setValue(factura.getDataDocument().toLocalDateTime().toLocalDate());
+				dataScadenta.setValue(factura.getDataScadenta().toLocalDateTime().toLocalDate());
+			}
+		});
+
+		buttonSalvare.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent evt) {
+
+				if (choiceBox.getSelectionModel().getSelectedItem() != null && !nrDocument.getText().equals("")) {
+					factura.setNrdoc(nrDocument.getText());
+					factura.setFirma(choiceBox.getSelectionModel().getSelectedItem());
+
+					factura.setDataDocument(Timestamp.valueOf(dataDocument.getValue().atStartOfDay()));
+					factura.setDataScadenta(Timestamp.valueOf(dataScadenta.getValue().atStartOfDay()));
+					new FacturaController().saveObject(factura);
+					initTable1();
+					table1.setDisable(false);
+					hbox.setVisible(false);
+					root.toFront();
+
 				} else {
 					final Stage stage = (Stage) root.getScene().getWindow();
 					if (alertError.getOwner() != stage)
@@ -475,7 +618,7 @@ public class IntrariIesiriController implements Initializable {
 		root.getChildren().add(hboxFirma);
 	}
 
-	public void adaugaArticol() {
+	public void adaugaInregistrare() {
 
 		HBox hbox = new HBox();
 		hbox.setPadding(new Insets(356, 0, 0, 0));
@@ -501,6 +644,7 @@ public class IntrariIesiriController implements Initializable {
 		tva.setPrefWidth(35);
 		ChoiceBox<Cont> choiceBox = new ChoiceBox<>();
 		choiceBox.setItems(getListCont());
+		choiceBox.getSelectionModel().selectFirst();
 		choiceBox.setPrefWidth(46);
 
 		Button buttonSalvare = new Button("Salvare");
@@ -610,55 +754,181 @@ public class IntrariIesiriController implements Initializable {
 			}
 		});
 
-		// pretUnitate.textProperty().addListener(new ChangeListener<String>() {
-		// @Override
-		// public void changed(ObservableValue<? extends String> observable,
-		// String oldValue, String newValue) {
-		//
-		// try {
-		// Double.parseDouble(newValue);
-		// pretUnitate.setText(newValue);
-		// double valoareDouble = Double.parseDouble(newValue) *
-		// Double.parseDouble(cantitate.getText());
-		// valoare.setText(valoareDouble + "");
-		// } catch (Exception e) {
-		// Platform.runLater(() -> {
-		// pretUnitate.clear();
-		// });
-		// final Stage stage = (Stage) root.getScene().getWindow();
-		// if (alertError.getOwner() != stage)
-		// alertError.initOwner(stage);
-		// alertError.setHeaderText(null);
-		// alertError.setContentText("Nu puteti introduce decat valori
-		// numerice!");
-		// }
-		// }
-		// });
-		//
-		// valoare.textProperty().addListener(new ChangeListener<String>() {
-		// @Override
-		// public void changed(ObservableValue<? extends String> observable,
-		// String oldValue, String newValue) {
-		//
-		// try {
-		// Double.parseDouble(newValue);
-		// valoare.setText(newValue);
-		// double valoareDouble = Double.parseDouble(newValue) /
-		// Double.parseDouble(cantitate.getText());
-		// pretUnitate.setText(valoareDouble + "");
-		// } catch (Exception e) {
-		// Platform.runLater(() -> {
-		// valoare.clear();
-		// });
-		// final Stage stage = (Stage) root.getScene().getWindow();
-		// if (alertError.getOwner() != stage)
-		// alertError.initOwner(stage);
-		// alertError.setHeaderText(null);
-		// alertError.setContentText("Nu puteti introduce decat valori
-		// numerice!");
-		// }
-		// }
-		// });
+		cantitate.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+				try {
+					Double.parseDouble(newValue);
+					cantitate.setText(newValue);
+				} catch (Exception e) {
+					Platform.runLater(() -> {
+						cantitate.clear();
+					});
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu puteti introduce decat valori numerice!");
+				}
+			}
+		});
+
+		hbox.getChildren().addAll(denumireArticol, um, cantitate, pretUnitate, valoare, tva, labelTva, choiceBox,
+				buttonSalvare, buttonAnulare);
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				denumireArticol.requestFocus();
+			}
+		});
+
+		root.getChildren().add(hbox);
+
+	}
+
+	public void modificaInregistrare(InregistrareFactura inregistrareFactura) {
+		HBox hbox = new HBox();
+		hbox.setPadding(new Insets(356, 0, 0, 0));
+		table2.setDisable(true);
+		table2.getItems().add(0, new InregistrareFactura());
+		int idSeleectat = table1.getSelectionModel().getSelectedIndex();
+
+		hbox.toFront();
+		// hbox.setMinHeight(250);
+		TextField denumireArticol = new TextField();
+		denumireArticol.setPrefWidth(372);
+		denumireArticol.setText(inregistrareFactura.getArticol().getDenumire());
+
+		TextField um = new TextField();
+		um.setPrefWidth(54);
+		um.setText(inregistrareFactura.getUm());
+
+		TextField cantitate = new TextField();
+		cantitate.setPrefWidth(61);
+		cantitate.setText(inregistrareFactura.getCantitate() + "");
+
+		TextField pretUnitate = new TextField();
+		pretUnitate.setPrefWidth(75);
+		pretUnitate.setText(inregistrareFactura.getPretUnitate() + "");
+
+		TextField valoare = new TextField();
+		valoare.setPrefWidth(75);
+		valoare.setText(inregistrareFactura.getValoare() + "");
+
+		TextField tva = new TextField();
+		tva.setText(inregistrareFactura.getCotaTVA() + "");
+		Label labelTva = new Label("  %");
+		labelTva.setPrefWidth(45);
+		tva.setPrefWidth(35);
+		ChoiceBox<Cont> choiceBox = new ChoiceBox<>();
+		choiceBox.setItems(getListCont());
+		choiceBox.getSelectionModel().selectFirst();
+		choiceBox.setPrefWidth(46);
+
+		Button buttonSalvare = new Button("Salvare");
+		Button buttonAnulare = new Button("Anulare");
+		buttonSalvare.setMinWidth(100);
+		buttonAnulare.setMinWidth(80);
+
+		buttonSalvare.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent evt) {
+				if (!denumireArticol.getText().equals("") && !cantitate.getText().equals("")
+						&& !valoare.getText().equals("")) {
+					Factura factura = table1.getSelectionModel().getSelectedItem();
+					int idSeleectat = table1.getSelectionModel().getSelectedIndex();
+					List<Articol> articole = new ArticolController().selectAll();
+					for (Articol a : articole) {
+						if (a.getDenumire().equals(denumireArticol.getText())) {
+							inregistrareFactura.setArticol(a);
+						}
+					}
+
+					if (!inregistrareFactura.getArticol().getDenumire().equals(denumireArticol.getText())) {
+						Articol articol = new Articol();
+						articol.setDenumire(denumireArticol.getText());
+						java.util.Date date = new java.util.Date();
+						Timestamp currentTime = new Timestamp(date.getTime());
+						articol.setData(currentTime);
+						inregistrareFactura.setArticol(articol);
+					}
+
+					inregistrareFactura.setUm(um.getText());
+					inregistrareFactura.setCantitate(Double.parseDouble(cantitate.getText()));
+					inregistrareFactura.setPretUnitate(Double.parseDouble(pretUnitate.getText()));
+					inregistrareFactura.setCotaTVA(Double.parseDouble(tva.getText()));
+					inregistrareFactura.setCont(choiceBox.getValue());
+
+					new InregistrareFacturaController().saveObject(inregistrareFactura);
+
+					table2.setItems(getListArticole(factura));
+					table2.setDisable(false);
+					hbox.setVisible(false);
+					table1.setItems(getListFacturi());
+					root.toFront();
+					table1.getSelectionModel().select(idSeleectat);
+
+				} else {
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText(null);
+					alertError.setContentText("Nu ati completat corect datele inregistrarii!");
+					alertError.show();
+				}
+
+			}
+		});
+
+		buttonAnulare.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent evt) {
+				table2.getItems().remove(0);
+				table2.setDisable(false);
+				hbox.setVisible(false);
+				root.toFront();
+
+			}
+		});
+
+		pretUnitate.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+				try {
+					if (!pretUnitate.getText().equals("")) {
+						double valoareDouble = Double.parseDouble(pretUnitate.getText())
+								* Double.parseDouble(cantitate.getText());
+						valoare.setText(valoareDouble + "");
+					}
+
+				} catch (NumberFormatException ex) {
+					pretUnitate.setText("0");
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText("Pret unitate");
+					alertError.setContentText("Nu puteti introduce decat valori numerice!");
+					alertError.show();
+				}
+			}
+		});
+
+		valoare.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+				try {
+					double valoareDouble = Double.parseDouble(valoare.getText())
+							/ Double.parseDouble(cantitate.getText());
+					pretUnitate.setText(valoareDouble + "");
+				} catch (NumberFormatException ex) {
+					valoare.setText("0");
+					final Stage stage = (Stage) root.getScene().getWindow();
+					if (alertError.getOwner() != stage)
+						alertError.initOwner(stage);
+					alertError.setHeaderText("Valoare");
+					alertError.setContentText("Nu puteti introduce decat valori numerice!");
+					alertError.show();
+				}
+			}
+		});
 
 		cantitate.textProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -701,5 +971,13 @@ public class IntrariIesiriController implements Initializable {
 			observableListConturi.add(a);
 		}
 		return observableListConturi;
+	}
+
+	public Firma getFirmaComparata(Factura factura, ObservableList<Firma> list) {
+		for (Firma f : list) {
+			if (f.getCui().equals(factura.getFirma().getCui()))
+				return f;
+		}
+		return null;
 	}
 }

@@ -1,3 +1,5 @@
-/gui/
 /tests/
+/controller/
+/gui/
+/model/
 /utils/

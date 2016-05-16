@@ -188,4 +188,13 @@ public class Factura extends BaseModel {
 		return list;
 
 	}
+
+	@Override
+	public String toString() {
+		return "Factura [id=" + id + ", nrdoc=" + nrdoc + ", dataDocument=" + dataDocument + ", dataScadenta="
+				+ dataScadenta + ", tip=" + tip + ", idInCategorie=" + idInCategorie + ", firma=" + firma + ", user="
+				+ user + ", chitante=" + chitante + "]";
+	}
+
+
 }

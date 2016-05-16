@@ -142,4 +142,13 @@ public class InregistrareFactura extends BaseModel {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return df.format(getValoare()+getValoareTVA());
 	}
+
+	@Override
+	public String toString() {
+		return "InregistrareFactura [id=" + id + ", tip=" + tip + ", articol=" + articol + ", cantitate=" + cantitate
+				+ ", pretUnitate=" + pretUnitate + ", cotaTVA=" + cotaTVA + ", um=" + um + ", cont=" + cont
+				+ ", factura=" + factura + "]";
+	}
+
+
 }
