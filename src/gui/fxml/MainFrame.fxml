@@ -29,6 +29,11 @@
                 <MenuItem mnemonicParsing="false" onAction="#registruPressed" text="Registru" />
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Situatii">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#situatieStocuriPressed" text="Stocuri" />
+              </items>
+            </Menu>
           </menus>
         </MenuBar>
       </top>

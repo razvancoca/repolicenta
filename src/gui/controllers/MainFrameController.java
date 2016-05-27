@@ -210,6 +210,32 @@ public class MainFrameController implements Initializable {
 
 	}
 
+
+	public void situatieStocuriPressed(ActionEvent event) {
+		try {
+			Stage primaryStage = (Stage) root.getScene().getWindow();
+			Stage stage = new Stage(StageStyle.UTILITY);
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/SituatieStocuri.fxml"));
+			final Parent root = fxmlLoader.load();
+			stage.setTitle("Situatie stocuri");
+			stage.setScene(new Scene(root));
+			stage.show();
+
+			stage.setAlwaysOnTop(true);
+
+			primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent onClosing) {
+					stage.hide();
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
