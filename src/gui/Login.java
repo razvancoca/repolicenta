@@ -17,7 +17,7 @@ public class Login extends Application {
 	public void start(Stage stage) {
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+			root = FXMLLoader.load(getClass().getResource("fxml/Login.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle("Login");

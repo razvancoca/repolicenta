@@ -1,10 +1,10 @@
-package gui;
+package gui.controllers;
 
 import java.net.URL;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.ResourceBundle;
 
-import controller.ContController;
+import controller.ArticolController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,17 +17,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import model.Cont;
+import javafx.stage.Stage;
+import model.Articol;
 
-public class ConturiController implements Initializable {
+public class ArticoleController implements Initializable {
 	@FXML
-	private TableView<Cont> tableView;
+	private TableView<Articol> tableView;
 	@FXML
 	private Button modificaButton;
 	@FXML
 	private Button salveazaButton;
-	@FXML
-	private Button adaugaContNou;
 	@FXML
 	private Button exit;
 	@FXML
@@ -35,17 +34,13 @@ public class ConturiController implements Initializable {
 	@FXML
 	private Label label;
 	@FXML
-	private TableColumn<Cont, String> id;
+	private TableColumn<Articol, String> id;
 	@FXML
-	private TableColumn<Cont, String> denumire;
+	private TableColumn<Articol, String> denumire;
 	@FXML
-	private TableColumn<Cont, String> cont;
-	@FXML
-	private TextField contNou;
-	@FXML
-	private TextField denumireContNou;
+	private TableColumn<Articol, String> data;
 
-	ObservableList<Cont> obsList = FXCollections.observableArrayList();
+	ObservableList<Articol> obsList = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -67,45 +62,34 @@ public class ConturiController implements Initializable {
 				salveazaButton.setVisible(false);
 				label.setVisible(false);
 				textField.setVisible(false);
-				Cont a = tableView.getSelectionModel().getSelectedItem();
-				a.setDenumireCont(textField.getText());
-				new ContController().saveObject(a);
+				Articol a = tableView.getSelectionModel().getSelectedItem();
+				a.setDenumire(textField.getText());
+				java.util.Date date = new java.util.Date();
+				Timestamp currentTime = new Timestamp(date.getTime());
+				a.setData(currentTime);
+				new ArticolController().saveObject(a);
 				populareTableView();
 			}
 		});
-
-		adaugaContNou.setOnAction(new EventHandler<ActionEvent>() {
-			private List<Cont> conturi = new ContController().selectAll();
-			@Override
-			public void handle(ActionEvent event) {
-				Cont c = new Cont();
-				c.setCont(contNou.getText());
-				c.setDenumireCont(denumireContNou.getText());
-
-				new ContController().saveObject(c);
-				populareTableView();
-			}
-		});
-
 
 	}
 
 	private void populareTableView() {
 		if (!obsList.isEmpty())
 			obsList = FXCollections.observableArrayList();
-		obsList.addAll(new ContController().selectAll());
+		obsList.addAll(new ArticolController().selectAll());
 		tableView.setItems(obsList);
 	}
 
 	private void initTable() {
 		tableView.setPlaceholder(new Label("Niciun articol introdus"));
 		id.setCellValueFactory(new PropertyValueFactory<>("id"));
-		denumire.setCellValueFactory(new PropertyValueFactory<>("denumireCont"));
-		cont.setCellValueFactory(new PropertyValueFactory<>("cont"));
+		denumire.setCellValueFactory(new PropertyValueFactory<>("denumire"));
+		data.setCellValueFactory(new PropertyValueFactory<>("data"));
 
 		tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 			if(tableView.getSelectionModel().getSelectedItem()!=null)
-			textField.setText(tableView.getSelectionModel().getSelectedItem().getDenumireCont());
+			textField.setText(tableView.getSelectionModel().getSelectedItem().getDenumire());
 		});
 	}
 

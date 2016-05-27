@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="root" prefHeight="578.0" prefWidth="949.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.IntrariIesiriController">
+<AnchorPane fx:id="root" prefHeight="578.0" prefWidth="949.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.IntrariIesiriController">
   <!-- TODO Add Nodes -->
   <children>
     <TableView fx:id="table1" layoutX="0.0" layoutY="35.0" prefHeight="254.0" prefWidth="949.0">

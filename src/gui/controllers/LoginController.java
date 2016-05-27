@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,7 +39,7 @@ public class LoginController implements Initializable {
 			if (user != null) {
 				try {
 					((Node) event.getSource()).getScene().getWindow().hide();
-					Parent parent = FXMLLoader.load(getClass().getResource("MainFrame.fxml"));
+					Parent parent = FXMLLoader.load(getClass().getResource("../fxml/MainFrame.fxml"));
 					Scene scene = new Scene(parent);
 					Stage stage = new Stage();
 					stage.setScene(scene);

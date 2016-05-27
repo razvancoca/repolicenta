@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,7 +30,7 @@ public class MainFrameController implements Initializable {
 		try {
 			Stage primaryStage = (Stage) root.getScene().getWindow();
 			Stage stage = new Stage(StageStyle.UTILITY);
-			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ClientiFurnizori.fxml"));
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/ClientiFurnizori.fxml"));
 			fxmlLoader.getNamespace().put("tip", "client");
 
 			final Parent root = fxmlLoader.load();
@@ -58,7 +58,7 @@ public class MainFrameController implements Initializable {
 		try {
 			Stage primaryStage = (Stage) root.getScene().getWindow();
 			Stage stage = new Stage(StageStyle.UTILITY);
-			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ClientiFurnizori.fxml"));
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/ClientiFurnizori.fxml"));
 			fxmlLoader.getNamespace().put("tip", "furnizor");
 
 			final Parent root = fxmlLoader.load();
@@ -85,7 +85,7 @@ public class MainFrameController implements Initializable {
 		try {
 			Stage primaryStage = (Stage) root.getScene().getWindow();
 			Stage stage = new Stage(StageStyle.UTILITY);
-			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("IntrariIesiri.fxml"));
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/IntrariIesiri.fxml"));
 			fxmlLoader.getNamespace().put("tip", "intrare");
 
 			final Parent root = fxmlLoader.load();
@@ -112,7 +112,7 @@ public class MainFrameController implements Initializable {
 		try {
 			Stage primaryStage = (Stage) root.getScene().getWindow();
 			Stage stage = new Stage(StageStyle.UTILITY);
-			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("IntrariIesiri.fxml"));
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/IntrariIesiri.fxml"));
 			fxmlLoader.getNamespace().put("tip", "iesire");
 
 			final Parent root = fxmlLoader.load();
@@ -139,7 +139,7 @@ public class MainFrameController implements Initializable {
 		try {
 			Stage primaryStage = (Stage) root.getScene().getWindow();
 			Stage stage = new Stage(StageStyle.UTILITY);
-			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Articole.fxml"));
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/Articole.fxml"));
 			final Parent root = fxmlLoader.load();
 			stage.setTitle("Articole");
 			stage.setScene(new Scene(root));
@@ -164,9 +164,34 @@ public class MainFrameController implements Initializable {
 		try {
 			Stage primaryStage = (Stage) root.getScene().getWindow();
 			Stage stage = new Stage(StageStyle.UTILITY);
-			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Conturi.fxml"));
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/Conturi.fxml"));
 			final Parent root = fxmlLoader.load();
 			stage.setTitle("Conturi");
+			stage.setScene(new Scene(root));
+			stage.show();
+
+			stage.setAlwaysOnTop(true);
+
+			primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent onClosing) {
+					stage.hide();
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void registruPressed(ActionEvent event) {
+		try {
+			Stage primaryStage = (Stage) root.getScene().getWindow();
+			Stage stage = new Stage(StageStyle.UTILITY);
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/Registru.fxml"));
+			final Parent root = fxmlLoader.load();
+			stage.setTitle("Registru");
 			stage.setScene(new Scene(root));
 			stage.show();
 

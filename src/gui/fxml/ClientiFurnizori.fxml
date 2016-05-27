@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="root" prefHeight="486.0" prefWidth="714.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.ClientiFurnizoriController">
+<AnchorPane fx:id="root" prefHeight="486.0" prefWidth="714.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.ClientiFurnizoriController">
   <!-- TODO Add Nodes -->
   <children>
     <SplitPane fx:id="splitPane" disable="false" dividerPositions="0.5971074380165289" focusTraversable="true" layoutX="0.0" layoutY="0.0" orientation="VERTICAL" prefHeight="486.0" prefWidth="714.0" visible="true" SplitPane.resizableWithParent="false">

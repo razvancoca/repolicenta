@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 
 import java.net.URL;
 import java.sql.Timestamp;
@@ -965,11 +965,7 @@ public class IntrariIesiriController implements Initializable {
 	}
 
 	private ObservableList<Cont> getListCont() {
-		List<Cont> listCont = new ContController().selectAll();
-		observableListConturi = FXCollections.observableArrayList();
-		for (Cont a : listCont) {
-			observableListConturi.add(a);
-		}
+		observableListConturi = FXCollections.observableArrayList(new ContController().selectAll());
 		return observableListConturi;
 	}
 

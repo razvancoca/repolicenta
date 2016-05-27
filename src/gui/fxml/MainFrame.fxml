@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.MainFrameController">
+<AnchorPane fx:id="root" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.MainFrameController">
   <!-- TODO Add Nodes -->
   <children>
     <BorderPane layoutX="0.0" layoutY="0.0" prefHeight="662.0001220703125" prefWidth="1046.0" style="-fx-background-color: white;">
@@ -24,8 +24,9 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Facturi">
               <items>
-                <MenuItem mnemonicParsing="false" text="Intrari" onAction="#intrariPressed" />
-                <MenuItem mnemonicParsing="false" text="Iesiri" onAction="#iesiriPressed"/>
+                <MenuItem mnemonicParsing="false" onAction="#intrariPressed" text="Intrari" />
+                <MenuItem mnemonicParsing="false" onAction="#iesiriPressed" text="Iesiri" />
+                <MenuItem mnemonicParsing="false" onAction="#registruPressed" text="Registru" />
               </items>
             </Menu>
           </menus>

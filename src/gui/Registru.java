@@ -9,16 +9,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utils.DBConnection;
 
-public class ClientiFurnizori extends Application{
+public class Registru extends Application{
 
 	@Override
 	public void start(Stage stage) {
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("ClientiFurnizori.fxml"));
+			root = FXMLLoader.load(getClass().getResource("fxml/Registru.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
-			stage.setTitle("Clienti");
+			stage.setTitle("Registru");
 			stage.show();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -32,11 +32,6 @@ public class ClientiFurnizori extends Application{
 
 	@Override
 	public void stop() throws Exception {
-		try{
-			DBConnection.getInstance().closeEMF();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 		super.stop();
 	}
 

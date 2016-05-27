@@ -19,11 +19,12 @@
 		<class>model.Cont</class>
 		<class>model.DenumireArticol</class>
 		<class>model.InregistrareFactura</class>
+		<class>model.OperatiuneRegistru</class>
+
 
 
 		<properties>
-			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/contabilitatedb" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/contabilitatedb" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.password" value="root" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
@@ -34,7 +35,8 @@
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.event.merge.entity_copy_observer" value="allow"/>
+			<property name="hibernate.event.merge.entity_copy_observer"
+				value="allow" />
 
 
 		</properties>
