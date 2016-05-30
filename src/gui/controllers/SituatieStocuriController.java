@@ -52,15 +52,15 @@ public class SituatieStocuriController implements Initializable {
 	@FXML
 	private ChoiceBox<String> choiceBoxAn;
 
+	private static int LUNA_CURENTA = Calendar.getInstance().get(Calendar.MONTH);
+
 	ObservableList<SituatieStocuriTable> situatie = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		initializareTableView();
-		//choiceBoxLuna.getSelectionModel().select(getLunaCurenta());
-		//choiceBoxAn.getSelectionModel().selectFirst();
-
+		initializareChoiceBoxuri();
 	}
 
 	private void initializareTableView() {
@@ -73,29 +73,45 @@ public class SituatieStocuriController implements Initializable {
 		valoareIntrata.setCellValueFactory(new PropertyValueFactory<>("valoareIntrata"));
 		valoareIesita.setCellValueFactory(new PropertyValueFactory<>("valoareIesita"));
 		stocCurent.setCellValueFactory(new PropertyValueFactory<>("stocCurent"));
-		tableView.setItems(getSituatie(4));
+		tableView.setItems(getSituatie(LUNA_CURENTA));
+	}
+
+	private void initializareChoiceBoxuri() {
+		choiceBoxLuna.getSelectionModel().select(getLunaCurenta());
+		choiceBoxAn.getSelectionModel().selectFirst();
+
+		choiceBoxLuna.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+			if (newSelection != null) {
+				LUNA_CURENTA = choiceBoxLuna.getSelectionModel().getSelectedIndex();
+				tableView.getItems().clear();
+				tableView.setItems(getSituatie(LUNA_CURENTA));
+			}
+		});
+
 	}
 
 	private ObservableList<SituatieStocuriTable> getSituatie(int luna) {
+		situatie.clear();
+
 		List<InregistrareFactura> inregistrari = new ArrayList<>();
-
 		List<Factura> facturi = new FacturaController().selectAll();
-		List<Articol> articole = new ArticolController().selectAll();
+		List<Articol> articole = new ArrayList<>();
 
-		for(Factura f : facturi){
-			if(f.getDataDocument().getMonth() == luna){
+		// preluare facturi din luna curenta
+		for (Factura f : facturi) {
+			if (f.getDataDocument().getMonth() == luna) {
 				inregistrari.addAll(f.getArticole());
 			}
 		}
 
-		for (Articol a : articole) {
-			situatie.add(new SituatieStocuriTable(a.getDenumire()));
+		// preluare articole utilizate in luna curenta
+		for (InregistrareFactura iff : inregistrari) {
+			articole.add(iff.getArticol());
 		}
 
 		for (InregistrareFactura iff : inregistrari) {
-			SituatieStocuriTable s = getSituatieByArticol(iff.getArticol());
+			SituatieStocuriTable s = getSituatieByArticol(iff.getArticol().getDenumire());
 			s.setUm(iff.getUm());
-
 			// daca e intrare
 			if (iff.getTip() == 0) {
 				s.setCantitateIntrata(s.getCantitateIntrata() + iff.getCantitate());
@@ -106,15 +122,19 @@ public class SituatieStocuriController implements Initializable {
 			}
 			s.setStocCurent(s.getCantitateIntrata() - s.getCantitateIesita());
 		}
+
 		return situatie;
 	}
 
-	private SituatieStocuriTable getSituatieByArticol(Articol a) {
+	private SituatieStocuriTable getSituatieByArticol(String denumire) {
 		for (SituatieStocuriTable s : situatie) {
-			if (s.getDenumire().equals(a.getDenumire()))
+			if (s.getDenumire().equals(denumire)) {
 				return s;
+			}
 		}
-		return null;
+		SituatieStocuriTable sitNoua = new SituatieStocuriTable(denumire);
+		situatie.add(sitNoua);
+		return sitNoua;
 	}
 
 	private String getLunaCurenta() {

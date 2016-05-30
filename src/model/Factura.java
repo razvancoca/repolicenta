@@ -39,7 +39,6 @@ public class Factura extends BaseModel {
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	List<Chitanta> chitante;
 
-
 	public int getId() {
 		return id;
 	}
@@ -108,42 +107,38 @@ public class Factura extends BaseModel {
 		return "---";
 	}
 
-
-
 	public Factura() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-
-	public String getStringDateD(){
-		if(dataDocument==null){
-			 java.util.Date date= new java.util.Date();
-			 dataDocument = new Timestamp(date.getTime());
+	public String getStringDateD() {
+		if (dataDocument == null) {
+			java.util.Date date = new java.util.Date();
+			dataDocument = new Timestamp(date.getTime());
 		}
 		return new java.text.SimpleDateFormat("dd.MM.yyyy").format(dataDocument);
 	}
 
-	public String getStringDateS(){
-		if(dataScadenta==null){
-			 java.util.Date date= new java.util.Date();
-			 dataScadenta = new Timestamp(date.getTime());
+	public String getStringDateS() {
+		if (dataScadenta == null) {
+			java.util.Date date = new java.util.Date();
+			dataScadenta = new Timestamp(date.getTime());
 		}
 		return new java.text.SimpleDateFormat("dd.MM.yyyy").format(dataScadenta);
 	}
 
-	public String getTotalFactura(){
+	public String getTotalFactura() {
 		List<InregistrareFactura> list = new InregistrareFacturaController().selectAll();
-		double sum=0;
-		for(InregistrareFactura iff:list){
-			if(iff.getFactura().getId()==id){
-				sum+=iff.getTotal();
+		double sum = 0;
+		for (InregistrareFactura iff : list) {
+			if (iff.getFactura().getId() == id) {
+				sum += iff.getTotal();
 			}
 		}
 		DecimalFormat df = new DecimalFormat("0.00");
 		return df.format(sum);
 	}
-
 
 	public User getUser() {
 		return user;
@@ -175,26 +170,24 @@ public class Factura extends BaseModel {
 		this.chitante = chitante;
 	}
 
-
-	public List<InregistrareFactura> getArticole(){
+	public List<InregistrareFactura> getArticole() {
 		List<InregistrareFactura> temp = new InregistrareFacturaController().selectAll();
 		List<InregistrareFactura> list = new ArrayList<InregistrareFactura>();
 
-		for(InregistrareFactura i: list){
-			if(i.getFactura().equals(this)){
-				list.add(i);
+		for (InregistrareFactura iff : temp){
+			if(iff.getFactura().getId()==this.getId()){
+				list.add(iff);
 			}
 		}
-		return list;
+			return list;
 
 	}
 
-	@Override
-	public String toString() {
-		return "Factura [id=" + id + ", nrdoc=" + nrdoc + ", dataDocument=" + dataDocument + ", dataScadenta="
-				+ dataScadenta + ", tip=" + tip + ", idInCategorie=" + idInCategorie + ", firma=" + firma + ", user="
-				+ user + ", chitante=" + chitante + "]";
-	}
-
+//	@Override
+//	public String toString() {
+//		return "Factura [id=" + id + ", nrdoc=" + nrdoc + ", dataDocument=" + dataDocument + ", dataScadenta="
+//				+ dataScadenta + ", tip=" + tip + ", idInCategorie=" + idInCategorie + ", firma=" + firma + ", user="
+//				+ user + ", chitante=" + chitante + "]";
+//	}
 
 }

@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="root" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.MainFrameController">
+<AnchorPane fx:id="root" prefHeight="710.0001220703125" prefWidth="1125.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.MainFrameController">
   <!-- TODO Add Nodes -->
   <children>
-    <BorderPane layoutX="0.0" layoutY="0.0" prefHeight="662.0001220703125" prefWidth="1046.0" style="-fx-background-color: white;">
+    <BorderPane layoutX="0.0" layoutY="0.0" prefHeight="710.0001220703125" prefWidth="1125.0">
+      <center>
+        <AnchorPane prefHeight="686.0001220703125" prefWidth="1125.0">
+          <children>
+            <AnchorPane fx:id="root2" layoutX="7.0" layoutY="57.0" minHeight="379.0" prefHeight="421.0" prefWidth="520.0" style="-fx-background-color: white;">
+              <children>
+                <ChoiceBox layoutX="182.0" layoutY="390.0" prefWidth="118.0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Trimestrul I" />
+                      <String fx:value="Trimestrul II" />
+                      <String fx:value="Trimestrul III" />
+                      <String fx:value="Trimestrul IV" />
+                    </FXCollections>
+                  </items>
+                </ChoiceBox>
+              </children>
+            </AnchorPane>
+            <AnchorPane id="root2" layoutX="539.0" layoutY="40.0" prefHeight="430.0" prefWidth="520.0" style="-fx-background-color: white;" />
+            <AnchorPane id="root2" layoutX="14.0" layoutY="464.0" prefHeight="209.0" prefWidth="1097.0" style="-fx-background-color: white;" />
+            <AnchorPane id="root2" layoutX="0.0" layoutY="0.0" prefHeight="43.0" prefWidth="1125.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 2px;">
+              <children>
+                <Label graphicTextGap="5.0" layoutX="447.0" layoutY="7.0" text="SUMAR CONTABIL" textAlignment="LEFT" textFill="#33b6ff" underline="false" wrapText="false">
+                  <font>
+                    <Font name="Arial" size="25.0" />
+                  </font>
+                </Label>
+              </children>
+            </AnchorPane>
+          </children>
+        </AnchorPane>
+      </center>
       <top>
         <MenuBar>
           <menus>

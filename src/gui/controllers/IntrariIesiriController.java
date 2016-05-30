@@ -661,19 +661,24 @@ public class IntrariIesiriController implements Initializable {
 					Factura factura = table1.getSelectionModel().getSelectedItem();
 					int idSeleectat = table1.getSelectionModel().getSelectedIndex();
 					List<Articol> articole = new ArticolController().selectAll();
+
 					for (Articol a : articole) {
-						if (a.getDenumire().equals(denumireArticol.getText())) {
+						if (a.getDenumire().equalsIgnoreCase(denumireArticol.getText())) {
 							inregistrareFactura.setArticol(a);
 						}
 					}
 
 					if (inregistrareFactura.getArticol() == null) {
-						Articol articol = new Articol();
-						articol.setDenumire(denumireArticol.getText());
-						java.util.Date date = new java.util.Date();
-						Timestamp currentTime = new Timestamp(date.getTime());
-						articol.setData(currentTime);
-						inregistrareFactura.setArticol(articol);
+						try{
+							Articol articol = new Articol();
+							articol.setDenumire(denumireArticol.getText());
+							java.util.Date date = new java.util.Date();
+							Timestamp currentTime = new Timestamp(date.getTime());
+							articol.setData(currentTime);
+							inregistrareFactura.setArticol(articol);
+						}catch(Exception e){
+							System.out.println("exceptie");
+						}
 					}
 
 					inregistrareFactura.setUm(um.getText());
