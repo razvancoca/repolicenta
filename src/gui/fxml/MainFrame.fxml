@@ -16,9 +16,9 @@
       <center>
         <AnchorPane prefHeight="686.0001220703125" prefWidth="1125.0">
           <children>
-            <AnchorPane fx:id="root2" layoutX="7.0" layoutY="57.0" minHeight="379.0" prefHeight="421.0" prefWidth="520.0" style="-fx-background-color: white;">
+            <AnchorPane fx:id="root2" layoutX="2.0" layoutY="46.0" minHeight="364.0" prefHeight="369.9998779296875" prefWidth="520.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
               <children>
-                <ChoiceBox layoutX="182.0" layoutY="390.0" prefWidth="118.0">
+                <ChoiceBox fx:id="trimestru" layoutX="193.0" layoutY="328.0" prefWidth="118.0">
                   <items>
                     <FXCollections fx:factory="observableArrayList">
                       <String fx:value="Trimestrul I" />
@@ -30,9 +30,9 @@
                 </ChoiceBox>
               </children>
             </AnchorPane>
-            <AnchorPane id="root2" layoutX="539.0" layoutY="40.0" prefHeight="430.0" prefWidth="520.0" style="-fx-background-color: white;" />
-            <AnchorPane id="root2" layoutX="14.0" layoutY="464.0" prefHeight="209.0" prefWidth="1097.0" style="-fx-background-color: white;" />
-            <AnchorPane id="root2" layoutX="0.0" layoutY="0.0" prefHeight="43.0" prefWidth="1125.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 2px;">
+            <AnchorPane id="root2" layoutX="526.0" layoutY="46.0" prefHeight="370.0" prefWidth="598.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" />
+            <AnchorPane id="root2" layoutX="2.0" layoutY="418.0" prefHeight="255.0" prefWidth="1123.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" />
+            <AnchorPane id="root2" layoutX="2.0" layoutY="1.0" prefHeight="43.0" prefWidth="1125.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
               <children>
                 <Label graphicTextGap="5.0" layoutX="447.0" layoutY="7.0" text="SUMAR CONTABIL" textAlignment="LEFT" textFill="#33b6ff" underline="false" wrapText="false">
                   <font>
