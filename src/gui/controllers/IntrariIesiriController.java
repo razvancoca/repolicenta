@@ -129,8 +129,7 @@ public class IntrariIesiriController implements Initializable {
 		initTable1();
 		initTable2();
 		getSelectedRowFunction();
-		TableViewSelectionModel<Factura> model = table1.getSelectionModel();
-		model.select(0);
+		table1.getSelectionModel().select(0);
 
 		facturaNouaButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -244,24 +243,15 @@ public class IntrariIesiriController implements Initializable {
 	}
 
 	private void initTable1() {
-
 		table1.setPlaceholder(new Label("Nicio factura de " + tipLabel.getText() + " introdusa"));
 		nrDoc1.setCellValueFactory(new PropertyValueFactory<>("nrdoc"));
-
 		denumire1.setCellValueFactory(new PropertyValueFactory<>("denumireFirma"));
-
 		dataD.setCellValueFactory(new PropertyValueFactory<>("stringDateD"));
-
 		dataS.setCellValueFactory(new PropertyValueFactory<>("stringDateS"));
-
 		nrCrt1.setCellValueFactory(new PropertyValueFactory<>("idInCategorie"));
-
 		totalTable1.setCellValueFactory(new PropertyValueFactory<>("totalFactura"));
-
 		table1.setItems(getListFacturi());
-
 		nrCrt1.setSortable(false);
-
 		table1.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 			if (newSelection != null) {
 				table2.getSelectionModel().clearSelection();
@@ -669,14 +659,14 @@ public class IntrariIesiriController implements Initializable {
 					}
 
 					if (inregistrareFactura.getArticol() == null) {
-						try{
+						try {
 							Articol articol = new Articol();
 							articol.setDenumire(denumireArticol.getText());
 							java.util.Date date = new java.util.Date();
 							Timestamp currentTime = new Timestamp(date.getTime());
 							articol.setData(currentTime);
 							inregistrareFactura.setArticol(articol);
-						}catch(Exception e){
+						} catch (Exception e) {
 							System.out.println("exceptie");
 						}
 					}

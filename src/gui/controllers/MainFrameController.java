@@ -2,6 +2,7 @@ package gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.ResourceBundle;
 
 import controller.FacturaController;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,19 +24,53 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import model.Articol;
 import model.Factura;
+import model.Firma;
 import model.InregistrareFactura;
 import model.SituatieStocuriTable;
+import utils.DBConnection;
 
 public class MainFrameController implements Initializable {
 
 	@FXML
 	private AnchorPane root;
+
+	// TableView 1
+	@FXML
+	private TableView<Factura> table1;
+	@FXML
+	private TableColumn<Factura, String> nrDoc1;
+	@FXML
+	private TableColumn<Factura, Firma> denumire1;
+	@FXML
+	private TableColumn<Factura, Timestamp> dataD1;
+	@FXML
+	private TableColumn<Factura, Timestamp> dataS1;
+	@FXML
+	private TableColumn<InregistrareFactura, String> totalTable1;
+
+	// TableView 2
+	@FXML
+	private TableView<Factura> table2;
+	@FXML
+	private TableColumn<Factura, String> nrDoc2;
+	@FXML
+	private TableColumn<Factura, Firma> denumire2;
+	@FXML
+	private TableColumn<Factura, Timestamp> dataD2;
+	@FXML
+	private TableColumn<Factura, Timestamp> dataS2;
+	@FXML
+	private TableColumn<InregistrareFactura, String> totalTable2;
 
 	@FXML
 	private AnchorPane root2;
@@ -48,13 +85,21 @@ public class MainFrameController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		initializareControale();
-		trimestru.getSelectionModel().select(TRIM_CURENT);
+		initTable1();
+		initTable2();
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				initializareControlGrafic();
+				trimestru.getSelectionModel().select(TRIM_CURENT);
+			}
+		});
+
 
 	}
 
-	private void initializareControale() {
+	private void initializareControlGrafic() {
 
 		trimestru.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 			if (newSelection != null) {
@@ -64,7 +109,34 @@ public class MainFrameController implements Initializable {
 			}
 		});
 
-		initializareGrafic(TRIM_CURENT);
+	}
+
+	private void initTable1() {
+		table1.setPlaceholder(new Label("Nicio factura introdusa"));
+		nrDoc1.setCellValueFactory(new PropertyValueFactory<>("nrdoc"));
+		denumire1.setCellValueFactory(new PropertyValueFactory<>("denumireFirma"));
+		dataD1.setCellValueFactory(new PropertyValueFactory<>("stringDateD"));
+		dataS1.setCellValueFactory(new PropertyValueFactory<>("stringDateS"));
+		totalTable1.setCellValueFactory(new PropertyValueFactory<>("totalFactura"));
+		table1.setItems(getListIntrari());
+	}
+
+	private void initTable2() {
+		table2.setPlaceholder(new Label("Nicio factura introdusa"));
+		nrDoc2.setCellValueFactory(new PropertyValueFactory<>("nrdoc"));
+		denumire2.setCellValueFactory(new PropertyValueFactory<>("denumireFirma"));
+		dataD2.setCellValueFactory(new PropertyValueFactory<>("stringDateD"));
+		dataS2.setCellValueFactory(new PropertyValueFactory<>("stringDateS"));
+		totalTable2.setCellValueFactory(new PropertyValueFactory<>("totalFactura"));
+		table2.setItems(getListIesiri());
+	}
+
+	private ObservableList<Factura> getListIntrari() {
+		return FXCollections.observableArrayList(new FacturaController().getUltimele20Intrari());
+	}
+
+	private ObservableList<Factura> getListIesiri() {
+		return FXCollections.observableArrayList(new FacturaController().getUltimele20Iesiri());
 
 	}
 
@@ -72,41 +144,38 @@ public class MainFrameController implements Initializable {
 		String luna1;
 		String luna2;
 
-		double[] valuesLuna1 = getSituatieByLuna((trimestru - 1) * 4);
-		double[] valuesLuna2 = getSituatieByLuna((trimestru - 1) * 4 + 1);
-		double[] valuesLuna3 = getSituatieByLuna((trimestru - 1) * 4 + 2);
+		double[] valuesLuna1 = getSituatieByLuna((trimestru - 1) * 3 + 1);
+		double[] valuesLuna2 = getSituatieByLuna((trimestru - 1) * 3 + 2);
+		double[] valuesLuna3 = getSituatieByLuna((trimestru - 1) * 3 + 3);
 
 		String luna3;
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
 		BarChart<String, Number> bc = new BarChart<>(xAxis, yAxis);
-		bc.setPrefWidth(400);
-		bc.setPrefHeight(300);
+		bc.setPrefWidth(450);
+		bc.setPrefHeight(340);
 		bc.setLayoutX(40);
 		bc.setLayoutY(10);
 		bc.setStyle("-fx-background-color:#FFF;-fx-margin:10px");
 		xAxis.setLabel("Luna");
 		yAxis.setLabel("Valoare");
+		bc.setTitle("Sumar situatie trimestriala");
 
 		if (trimestru == 1) {
-			bc.setTitle("Situatie trimestru I");
 			luna1 = "Ianuarie";
 			luna2 = "Februarie";
 			luna3 = "Martie";
 		} else if (trimestru == 2) {
-			bc.setTitle("Situatie trimestru II");
 			luna1 = "Aprilie";
 			luna2 = "Mai";
 			luna3 = "Iunie";
 
 		} else if (trimestru == 3) {
-			bc.setTitle("Situatie trimestru III");
 			luna1 = "Iulie";
 			luna2 = "August";
 			luna3 = "Septembrie";
 
 		} else {
-			bc.setTitle("Situatie trimestru IV");
 			luna1 = "Octombrie";
 			luna2 = "Noiembrie";
 			luna3 = "Decembrie";
@@ -137,17 +206,17 @@ public class MainFrameController implements Initializable {
 
 	public double[] getSituatieByLuna(int luna) {
 
-		double[] values = { 2221, 2, 3, 4 };
+		double[] values = { 0, 0, 0 };
 
 		List<InregistrareFactura> inregistrari = new ArrayList<>();
 		List<Factura> facturi = new FacturaController().selectAll();
 		List<Articol> articole = new ArrayList<>();
 
-		double stoc1,stoc2;
+		double stoc1, stoc2;
 
 		// preluare facturi din luna curenta
 		for (Factura f : facturi) {
-			if (f.getDataDocument().getMonth() == luna) {
+			if (f.getDataDocument().getMonth() == luna - 1) {
 				inregistrari.addAll(f.getArticole());
 			}
 		}
@@ -160,12 +229,12 @@ public class MainFrameController implements Initializable {
 		for (InregistrareFactura iff : inregistrari) {
 			// daca e intrare
 			if (iff.getTip() == 0) {
-				values[0]+=iff.getValoare();
+				values[0] += iff.getValoare();
 			} else {
-				values[1]+=iff.getValoare();
+				values[1] += iff.getValoare();
 			}
 
-			values[2]= values[1]-values[0];
+			values[2] = values[1] - values[0];
 		}
 
 		return values;

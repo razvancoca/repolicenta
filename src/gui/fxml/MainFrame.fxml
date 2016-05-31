@@ -7,6 +7,7 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="root" prefHeight="710.0001220703125" prefWidth="1125.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.MainFrameController">
@@ -16,9 +17,9 @@
       <center>
         <AnchorPane prefHeight="686.0001220703125" prefWidth="1125.0">
           <children>
-            <AnchorPane fx:id="root2" layoutX="2.0" layoutY="46.0" minHeight="364.0" prefHeight="369.9998779296875" prefWidth="520.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
+            <AnchorPane fx:id="root2" layoutX="2.0" layoutY="47.0" minHeight="364.0" prefHeight="388.0" prefWidth="561.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
               <children>
-                <ChoiceBox fx:id="trimestru" layoutX="193.0" layoutY="328.0" prefWidth="118.0">
+                <ChoiceBox fx:id="trimestru" layoutX="431.0" layoutY="351.0" prefWidth="118.0">
                   <items>
                     <FXCollections fx:factory="observableArrayList">
                       <String fx:value="Trimestrul I" />
@@ -30,17 +31,53 @@
                 </ChoiceBox>
               </children>
             </AnchorPane>
-            <AnchorPane id="root2" layoutX="526.0" layoutY="46.0" prefHeight="370.0" prefWidth="598.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" />
-            <AnchorPane id="root2" layoutX="2.0" layoutY="418.0" prefHeight="255.0" prefWidth="1123.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" />
-            <AnchorPane id="root2" layoutX="2.0" layoutY="1.0" prefHeight="43.0" prefWidth="1125.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
+            <AnchorPane id="root2" layoutX="564.0" layoutY="47.0" prefHeight="388.0" prefWidth="560.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" />
+            <AnchorPane id="root2" layoutX="2.0" layoutY="436.0" minHeight="37.0" prefHeight="37.0" prefWidth="561.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
               <children>
-                <Label graphicTextGap="5.0" layoutX="447.0" layoutY="7.0" text="SUMAR CONTABIL" textAlignment="LEFT" textFill="#33b6ff" underline="false" wrapText="false">
+                <Label graphicTextGap="5.0" layoutX="46.0" layoutY="8.0" text="Facturi de intrare recente" textAlignment="LEFT" underline="false" wrapText="false">
                   <font>
-                    <Font name="Arial" size="25.0" />
+                    <Font name="Arial" size="16.0" fx:id="x1" />
+                  </font>
+                  <textFill>
+                    <Color blue="0.000" green="0.192" red="0.200" fx:id="x2" />
+                  </textFill>
+                </Label>
+              </children>
+            </AnchorPane>
+            <AnchorPane id="root2" layoutX="2.0" layoutY="1.0" prefHeight="43.0" prefWidth="1122.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
+              <children>
+                <Label graphicTextGap="5.0" layoutX="337.0" layoutY="11.0" text="SUMAR SITUATIE FINANCIAR-CONTABILA" textAlignment="LEFT" textFill="#33b6ff" underline="false" wrapText="false">
+                  <font>
+                    <Font name="Arial" size="21.0" />
+                  </font>
+                </Label>
+                <Label id="lblMessage" layoutX="992.0" layoutY="0.0" minHeight="43.0" prefHeight="43.0" prefWidth="126.0" text="eConta" textAlignment="LEFT" textFill="#3385ff">
+                  <font>
+                    <Font name="Arial" size="33.0" />
                   </font>
                 </Label>
               </children>
             </AnchorPane>
+            <AnchorPane id="root2" layoutX="564.0" layoutY="436.0" prefHeight="37.0" prefWidth="560.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" />
+            <Label font="$x1" graphicTextGap="5.0" layoutX="573.0" layoutY="443.0" text="Facturi de iesire recente" textAlignment="LEFT" textFill="$x2" underline="false" wrapText="false" />
+            <TableView fx:id="table1" layoutX="2.0" layoutY="473.0" prefHeight="214.0" prefWidth="561.0">
+              <columns>
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="73.0" text="Nr.doc" fx:id="nrDoc1" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="180.0" text="Denumire firma" fx:id="denumire1" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="109.0" style=" -fx-alignment: CENTER;" text="Data document" fx:id="dataD1" />
+                <TableColumn  maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" style=" -fx-alignment: CENTER;" text="Data scadenta" fx:id="dataS1" />
+                <TableColumn  maxWidth="5000.0" minWidth="10.0" prefWidth="90.0" text="Total" fx:id="totalTable1" />
+              </columns>
+            </TableView>
+            <TableView fx:id="table2" layoutX="564.0" layoutY="473.0" prefHeight="214.0" prefWidth="561.0">
+              <columns>
+                <TableColumn fx:id="nrDoc2" maxWidth="5000.0" minWidth="10.0" prefWidth="73.0" text="Nr.doc" />
+                <TableColumn fx:id="denumire2" maxWidth="5000.0" minWidth="10.0" prefWidth="180.0" text="Denumire firma" />
+                <TableColumn fx:id="dataD2" maxWidth="5000.0" minWidth="10.0" prefWidth="109.0" style=" -fx-alignment: CENTER;" text="Data document" />
+                <TableColumn fx:id="dataS2" maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" style=" -fx-alignment: CENTER;" text="Data scadenta" />
+                <TableColumn fx:id="totalTable2" maxWidth="5000.0" minWidth="10.0" prefWidth="90.0" text="Total" />
+              </columns>
+            </TableView>
           </children>
         </AnchorPane>
       </center>
