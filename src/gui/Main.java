@@ -9,10 +9,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-import model.Firma;
-import utils.DBConnection;
+import model.User;
 
 public class Main extends Application {
+
+
+
 	@Override
 	public void start(Stage stage) {
 		Parent root;

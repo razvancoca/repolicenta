@@ -19,6 +19,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.User;
+import utils.CriptareMD5;
 import utils.DBConnection;
 import utils.ServiceProgressIndicator;
 
@@ -35,7 +36,7 @@ public class LoginController implements Initializable {
 	private void btnLoginAction(ActionEvent event) {
 		User user;
 		if (!txtUsername.getText().equals("") && !txtPassword.getText().equals("")) {
-			user = new UserController().login(txtUsername.getText(), txtPassword.getText());
+			user = new UserController().login(txtUsername.getText(), CriptareMD5.cryptWithMD5(txtPassword.getText()));
 			if (user != null) {
 				try {
 					((Node) event.getSource()).getScene().getWindow().hide();

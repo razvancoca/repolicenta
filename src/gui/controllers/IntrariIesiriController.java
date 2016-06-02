@@ -675,7 +675,15 @@ public class IntrariIesiriController implements Initializable {
 					inregistrareFactura.setCantitate(Double.parseDouble(cantitate.getText()));
 					inregistrareFactura.setPretUnitate(Double.parseDouble(pretUnitate.getText()));
 					inregistrareFactura.setCotaTVA(Double.parseDouble(tva.getText()));
-					inregistrareFactura.setCont(choiceBox.getValue());
+					Cont c = choiceBox.getValue();
+
+					//daca e intrare
+					if(TIP==0){
+						c.debitare(inregistrareFactura.getValoare());
+					}else{
+						c.creditare(inregistrareFactura.getValoare());
+					}
+					inregistrareFactura.setCont(c);
 					inregistrareFactura.setFactura(factura);
 					inregistrareFactura.setTip(TIP);
 

@@ -7,17 +7,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
 @Entity
-public class User extends BaseModel{
+public class User extends BaseModel {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String username;
 	private String password;
 	private String name;
 	private int type;
 
-
+	@Override
+	public String toString() {
+		if (type == 0)
+			return username + " (rol: Administrator)";
+		return username + " (rol: Contabil)";
+	}
 
 	public User() {
 		super();

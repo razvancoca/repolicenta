@@ -19,7 +19,7 @@
           <children>
             <AnchorPane fx:id="root2" layoutX="2.0" layoutY="47.0" minHeight="364.0" prefHeight="388.0" prefWidth="561.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
               <children>
-                <ChoiceBox fx:id="trimestru" layoutX="431.0" layoutY="351.0" prefWidth="118.0">
+                <ChoiceBox fx:id="trimestru" layoutX="222.0" layoutY="351.0" prefWidth="118.0">
                   <items>
                     <FXCollections fx:factory="observableArrayList">
                       <String fx:value="Trimestrul I" />
@@ -31,7 +31,15 @@
                 </ChoiceBox>
               </children>
             </AnchorPane>
-            <AnchorPane id="root2" layoutX="564.0" layoutY="47.0" prefHeight="388.0" prefWidth="560.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" />
+            <AnchorPane fx:id="root3" layoutX="564.0" layoutY="47.0" prefHeight="388.0" prefWidth="560.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
+              <children>
+                <ChoiceBox fx:id="conturi" layoutX="207.0" layoutY="353.0" prefWidth="118.0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList" />
+                  </items>
+                </ChoiceBox>
+              </children>
+            </AnchorPane>
             <AnchorPane id="root2" layoutX="2.0" layoutY="436.0" minHeight="37.0" prefHeight="37.0" prefWidth="561.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
               <children>
                 <Label graphicTextGap="5.0" layoutX="46.0" layoutY="8.0" text="Facturi de intrare recente" textAlignment="LEFT" underline="false" wrapText="false">
@@ -42,6 +50,7 @@
                     <Color blue="0.000" green="0.192" red="0.200" fx:id="x2" />
                   </textFill>
                 </Label>
+                <Button layoutX="455.0" layoutY="6.0" mnemonicParsing="false" onAction="#intrariPressed" text="Detaliere intrari" />
               </children>
             </AnchorPane>
             <AnchorPane id="root2" layoutX="2.0" layoutY="1.0" prefHeight="43.0" prefWidth="1122.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
@@ -58,24 +67,28 @@
                 </Label>
               </children>
             </AnchorPane>
-            <AnchorPane id="root2" layoutX="564.0" layoutY="436.0" prefHeight="37.0" prefWidth="560.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" />
-            <Label font="$x1" graphicTextGap="5.0" layoutX="573.0" layoutY="443.0" text="Facturi de iesire recente" textAlignment="LEFT" textFill="$x2" underline="false" wrapText="false" />
+            <AnchorPane id="root2" layoutX="564.0" layoutY="436.0" prefHeight="37.0" prefWidth="560.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;">
+              <children>
+                <Button layoutX="461.0" layoutY="6.0" mnemonicParsing="false" onAction="#iesiriPressed" text="Detaliere iesiri" />
+              </children>
+            </AnchorPane>
+            <Label font="$x1" graphicTextGap="5.0" layoutX="616.0" layoutY="446.0" text="Facturi de iesire recente" textAlignment="LEFT" textFill="$x2" underline="false" wrapText="false" />
             <TableView fx:id="table1" layoutX="2.0" layoutY="473.0" prefHeight="214.0" prefWidth="561.0">
               <columns>
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="73.0" text="Nr.doc" fx:id="nrDoc1" />
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="180.0" text="Denumire firma" fx:id="denumire1" />
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="109.0" style=" -fx-alignment: CENTER;" text="Data document" fx:id="dataD1" />
-                <TableColumn  maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" style=" -fx-alignment: CENTER;" text="Data scadenta" fx:id="dataS1" />
-                <TableColumn  maxWidth="5000.0" minWidth="10.0" prefWidth="90.0" text="Total" fx:id="totalTable1" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" style=" -fx-alignment: CENTER;" text="Data scadenta" fx:id="dataS1" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="90.0" text="Total" fx:id="totalTable1" />
               </columns>
             </TableView>
             <TableView fx:id="table2" layoutX="564.0" layoutY="473.0" prefHeight="214.0" prefWidth="561.0">
               <columns>
-                <TableColumn fx:id="nrDoc2" maxWidth="5000.0" minWidth="10.0" prefWidth="73.0" text="Nr.doc" />
-                <TableColumn fx:id="denumire2" maxWidth="5000.0" minWidth="10.0" prefWidth="180.0" text="Denumire firma" />
-                <TableColumn fx:id="dataD2" maxWidth="5000.0" minWidth="10.0" prefWidth="109.0" style=" -fx-alignment: CENTER;" text="Data document" />
-                <TableColumn fx:id="dataS2" maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" style=" -fx-alignment: CENTER;" text="Data scadenta" />
-                <TableColumn fx:id="totalTable2" maxWidth="5000.0" minWidth="10.0" prefWidth="90.0" text="Total" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="73.0" text="Nr.doc" fx:id="nrDoc2" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="180.0" text="Denumire firma" fx:id="denumire2" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="109.0" style=" -fx-alignment: CENTER;" text="Data document" fx:id="dataD2" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" style=" -fx-alignment: CENTER;" text="Data scadenta" fx:id="dataS2" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="90.0" text="Total" fx:id="totalTable2" />
               </columns>
             </TableView>
           </children>
@@ -93,7 +106,7 @@
                 <MenuItem mnemonicParsing="true" onAction="#exitPressed" text="Exit" />
               </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Facturi">
+            <Menu mnemonicParsing="false" text="Operatii">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#intrariPressed" text="Intrari" />
                 <MenuItem mnemonicParsing="false" onAction="#iesiriPressed" text="Iesiri" />
@@ -102,7 +115,19 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Situatii">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#situatieStocuriPressed" text="Stocuri" />
+                <MenuItem mnemonicParsing="false" onAction="#situatieStocuriPressed" text="Situatie stocuri" />
+                <MenuItem mnemonicParsing="false" onAction="#situatieVanzariPressed" text="Situatie vanzari" />
+                <MenuItem mnemonicParsing="false" onAction="#situatieAprovizionariPressed" text="Situatie aprovizionari" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Administrare">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#utilizatoriPressed" text="Utilizatori" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Estimare">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Estimare situatie trimestriala" />
               </items>
             </Menu>
           </menus>

@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import controller.ContController;
 import controller.FacturaController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -22,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -33,11 +35,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import model.Articol;
+import model.Cont;
 import model.Factura;
 import model.Firma;
 import model.InregistrareFactura;
-import model.SituatieStocuriTable;
-import utils.DBConnection;
 
 public class MainFrameController implements Initializable {
 
@@ -73,11 +74,17 @@ public class MainFrameController implements Initializable {
 	private TableColumn<InregistrareFactura, String> totalTable2;
 
 	@FXML
+	private AnchorPane root3;
+	@FXML
 	private AnchorPane root2;
 	@FXML
 	private ChoiceBox<String> trimestru;
-
+	@FXML
+	private ChoiceBox<Cont> conturi;
 	private static int TRIM_CURENT = Calendar.getInstance().get(Calendar.MONTH) / 4;
+
+	PieChart chart;
+	BarChart<String, Number> bc;
 
 	public void exitPressed() {
 		Platform.exit();
@@ -93,6 +100,25 @@ public class MainFrameController implements Initializable {
 				// TODO Auto-generated method stub
 				initializareControlGrafic();
 				trimestru.getSelectionModel().select(TRIM_CURENT);
+			}
+		});
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				conturi.setItems(FXCollections.observableArrayList(new ContController().selectAll()));
+				conturi.getSelectionModel().selectFirst();
+
+				initializareGrafic2(conturi.getSelectionModel().getSelectedItem());
+
+				conturi.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+					if (newSelection != null) {
+						initializareGrafic2(conturi.getSelectionModel().getSelectedItem());
+					}
+				});
+
+
 			}
 		});
 
@@ -141,6 +167,9 @@ public class MainFrameController implements Initializable {
 	}
 
 	public void initializareGrafic(int trimestru) {
+
+		root2.getChildren().remove(bc);
+
 		String luna1;
 		String luna2;
 
@@ -151,7 +180,7 @@ public class MainFrameController implements Initializable {
 		String luna3;
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
-		BarChart<String, Number> bc = new BarChart<>(xAxis, yAxis);
+		bc = new BarChart<>(xAxis, yAxis);
 		bc.setPrefWidth(450);
 		bc.setPrefHeight(340);
 		bc.setLayoutX(40);
@@ -202,6 +231,25 @@ public class MainFrameController implements Initializable {
 
 		root2.getChildren().add(bc);
 		bc.getData().addAll(series1, series2, series3);
+	}
+
+	public void initializareGrafic2(Cont cont){
+			root3.getChildren().remove(chart);
+		  ObservableList<PieChart.Data> pieChartData =
+	                FXCollections.observableArrayList(
+	                new PieChart.Data("Debit", cont.getSumaDebitoare()),
+	                new PieChart.Data("Credit", cont.getSumaCreditoare()));
+	        chart = new PieChart(pieChartData);
+	        chart.setTitle("Sumar situatie cont "+ cont.getCont()+" "+cont.getDenumireCont());
+
+	        chart.setPrefWidth(450);
+			chart.setPrefHeight(340);
+
+			chart.setLayoutX(40);
+			chart.setLayoutY(10);
+
+			root3.getChildren().add(chart);
+
 	}
 
 	public double[] getSituatieByLuna(int luna) {
@@ -448,5 +496,81 @@ public class MainFrameController implements Initializable {
 		}
 
 	}
+
+	public void utilizatoriPressed(ActionEvent event) {
+		try {
+			Stage primaryStage = (Stage) root.getScene().getWindow();
+			Stage stage = new Stage(StageStyle.UTILITY);
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/Utilizatori.fxml"));
+			final Parent root = fxmlLoader.load();
+			stage.setTitle("Utilizatori");
+			stage.setScene(new Scene(root));
+			stage.show();
+
+			stage.setAlwaysOnTop(true);
+
+			primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent onClosing) {
+					stage.hide();
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void situatieVanzariPressed(ActionEvent event) {
+		try {
+			Stage primaryStage = (Stage) root.getScene().getWindow();
+			Stage stage = new Stage(StageStyle.UTILITY);
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/SituatieVanzari.fxml"));
+			final Parent root = fxmlLoader.load();
+			stage.setTitle("Situatie vanzari");
+			stage.setScene(new Scene(root));
+			stage.show();
+
+			stage.setAlwaysOnTop(true);
+
+			primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent onClosing) {
+					stage.hide();
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void situatieAprovizionariPressed(ActionEvent event) {
+		try {
+			Stage primaryStage = (Stage) root.getScene().getWindow();
+			Stage stage = new Stage(StageStyle.UTILITY);
+			final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/SituatieAprovizionari.fxml"));
+			final Parent root = fxmlLoader.load();
+			stage.setTitle("Situatie Aprovizionari");
+			stage.setScene(new Scene(root));
+			stage.show();
+
+			stage.setAlwaysOnTop(true);
+
+			primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent onClosing) {
+					stage.hide();
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 
 }

@@ -21,6 +21,7 @@ public class Login extends Application {
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle("Login");
+			stage.setResizable(false);
 			stage.show();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

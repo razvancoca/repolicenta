@@ -59,7 +59,7 @@ public class Cont extends BaseModel{
 	}
 	@Override
 	public String toString() {
-		return cont;
+		return cont+ " "+denumireCont;
 	}
 
 	public void creditare(double suma){
