@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" prefHeight="623.0" prefWidth="860.0000999999975" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.EstimareTrimestrialaController">
+  <!-- TODO Add Nodes -->
+  <children>
+    <ChoiceBox fx:id="trimestru" layoutX="47.0" layoutY="24.0" prefWidth="118.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Trimestrul I" />
+          <String fx:value="Trimestrul II" />
+          <String fx:value="Trimestrul III" />
+          <String fx:value="Trimestrul IV" />
+        </FXCollections>
+      </items>
+    </ChoiceBox>
+  </children>
+</AnchorPane>

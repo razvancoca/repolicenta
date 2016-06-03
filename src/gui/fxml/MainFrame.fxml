@@ -125,9 +125,9 @@
                 <MenuItem mnemonicParsing="false" onAction="#utilizatoriPressed" text="Utilizatori" />
               </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Estimare">
+            <Menu mnemonicParsing="false" text="Estimare" >
               <items>
-                <MenuItem mnemonicParsing="false" text="Estimare situatie trimestriala" />
+                <MenuItem mnemonicParsing="false" text="Estimare situatie trimestriala" onAction="#estimareTrimestrialaPressed"/>
               </items>
             </Menu>
           </menus>
