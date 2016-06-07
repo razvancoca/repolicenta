@@ -5,8 +5,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="root" prefHeight="623.0" prefWidth="860.0000999999975" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.EstimareTrimestrialaController">
+<AnchorPane fx:id="root" prefHeight="671.9998779296875" prefWidth="860.0000999999975" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.controllers.EstimareTrimestrialaController">
   <!-- TODO Add Nodes -->
   <children>
     <ChoiceBox fx:id="trimestru" layoutX="47.0" layoutY="24.0" prefWidth="118.0">
@@ -19,5 +20,52 @@
         </FXCollections>
       </items>
     </ChoiceBox>
+    <Label fx:id="labelLuna1" layoutX="107.0" layoutY="451.0" text="Luna 1">
+      <font>
+        <Font size="16.0" fx:id="x1" />
+      </font>
+    </Label>
+    <Separator layoutX="276.0" layoutY="453.0" orientation="VERTICAL" prefHeight="176.0" />
+    <Label fx:id="labelLuna2" font="$x1" layoutX="391.0" layoutY="451.0" text="Luna 2" />
+    <Separator layoutX="554.0" layoutY="453.0" orientation="VERTICAL" prefHeight="162.0" />
+    <Label fx:id="labelLuna3" font="$x1" layoutX="687.0" layoutY="451.0" text="Luna 3" />
+    <Label layoutX="40.0" layoutY="404.0" text="Previziune">
+      <font>
+        <Font size="18.0" />
+      </font>
+    </Label>
+    <Separator layoutX="40.0" layoutY="436.0" prefWidth="773.0" />
+    <Button id="actualizeazaSituatie" fx:id="estimeazaSituatie" layoutX="721.0" layoutY="625.0" mnemonicParsing="false" onAction="#estimeazaPressed" text="Estimeaza situatie" />
+    <Label layoutX="19.0" layoutY="487.0" text="Valoare estimata aprovizionari:" />
+    <Label layoutX="50.0" layoutY="517.0" text="Valoare estimata vanzari:" />
+    <TextField fx:id="aprovizionariLuna1" layoutX="201.0" layoutY="486.0" prefWidth="59.0" />
+    <TextField fx:id="vanzariLuna1" layoutX="201.0" layoutY="514.0" prefWidth="59.0" />
+    <Button fx:id="adaugaLuna1" layoutX="202.0" layoutY="544.0" mnemonicParsing="false" onAction="#adaugaLuna1Pressed" text="Adauga" />
+    <Label layoutX="295.0" layoutY="487.0" text="Valoare estimata aprovizionari:" />
+    <Label layoutX="326.0" layoutY="517.0" text="Valoare estimata vanzari:" />
+    <TextField fx:id="aprovizionariLuna2" layoutX="477.0" layoutY="486.0" prefWidth="59.0" />
+    <TextField fx:id="vanzariLuna2" layoutX="477.0" layoutY="514.0" prefWidth="59.0" />
+    <Button layoutX="478.0" layoutY="544.0" mnemonicParsing="false" onAction="#adaugaLuna2Pressed" text="Adauga" />
+    <Label layoutX="587.0" layoutY="487.0" text="Valoare estimata aprovizionari:" />
+    <Label layoutX="618.0" layoutY="517.0" text="Valoare estimata vanzari:" />
+    <TextField fx:id="aprovizionariLuna3" layoutX="769.0" layoutY="486.0" prefWidth="59.0" />
+    <TextField fx:id="vanzariLuna3" layoutX="769.0" layoutY="514.0" prefWidth="59.0" />
+    <Button layoutX="770.0" layoutY="544.0" mnemonicParsing="false" onAction="#adaugaLuna3Pressed" text="Adauga" />
+    <Label fx:id="labelAprovizionariAdaugate1" layoutX="34.0" layoutY="571.0" prefWidth="202.0" text="Aprovizionari adaugate: 0" />
+    <Label fx:id="labelVanzariAdaugate1" layoutX="65.0" layoutY="587.0" prefWidth="171.0" text="Vanzari adaugate: 0" />
+    <Label fx:id="labelAprovizionariAdaugate2" layoutX="314.0" layoutY="571.0" prefWidth="202.0" text="Aprovizionari adaugate: 0" />
+    <Label fx:id="labelVanzariAdaugate2" layoutX="345.0" layoutY="587.0" prefWidth="171.0" text="Vanzari adaugate: 0" />
+    <Label fx:id="labelAprovizionariAdaugate3" layoutX="594.0" layoutY="571.0" prefWidth="202.0" text="Aprovizionari adaugate: 0" />
+    <Label fx:id="labelVanzariAdaugate3" layoutX="625.0" layoutY="587.0" prefWidth="171.0" text="Vanzari adaugate: 0" />
+    <AnchorPane fx:id="anchorBackgroundPreviziune" layoutX="9.0" layoutY="436.0" prefHeight="221.9998779296875" prefWidth="838.0" style="-fx-background-color: white;  -fx-border-color: #DDD;&#10;    -fx-border-width: 1px;&#10;" visible="false">
+      <children>
+        <Button layoutX="360.0" layoutY="130.0" mnemonicParsing="false" onAction="#reseteazaPressed" text="Resetare">
+          <font>
+            <Font size="22.0" fx:id="x2" />
+          </font>
+        </Button>
+        <Button font="$x2" layoutX="325.0" layoutY="71.0" mnemonicParsing="false" onAction="#printPressed" text="Printare rezultat" />
+      </children>
+    </AnchorPane>
   </children>
 </AnchorPane>

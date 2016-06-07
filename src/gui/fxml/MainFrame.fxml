@@ -79,7 +79,7 @@
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="180.0" text="Denumire firma" fx:id="denumire1" />
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="109.0" style=" -fx-alignment: CENTER;" text="Data document" fx:id="dataD1" />
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" style=" -fx-alignment: CENTER;" text="Data scadenta" fx:id="dataS1" />
-                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="90.0" text="Total" fx:id="totalTable1" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="78.0" text="Total" fx:id="totalTable1" />
               </columns>
             </TableView>
             <TableView fx:id="table2" layoutX="564.0" layoutY="473.0" prefHeight="214.0" prefWidth="561.0">
@@ -88,7 +88,7 @@
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="180.0" text="Denumire firma" fx:id="denumire2" />
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="109.0" style=" -fx-alignment: CENTER;" text="Data document" fx:id="dataD2" />
                 <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" style=" -fx-alignment: CENTER;" text="Data scadenta" fx:id="dataS2" />
-                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="90.0" text="Total" fx:id="totalTable2" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="75.0" text="Total" fx:id="totalTable2" />
               </columns>
             </TableView>
           </children>
@@ -125,9 +125,9 @@
                 <MenuItem mnemonicParsing="false" onAction="#utilizatoriPressed" text="Utilizatori" />
               </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Estimare" >
+            <Menu mnemonicParsing="false" text="Estimare">
               <items>
-                <MenuItem mnemonicParsing="false" text="Estimare situatie trimestriala" onAction="#estimareTrimestrialaPressed"/>
+                <MenuItem mnemonicParsing="false" onAction="#estimareTrimestrialaPressed" text="Estimare situatie trimestriala" />
               </items>
             </Menu>
           </menus>
